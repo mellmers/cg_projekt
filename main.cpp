@@ -2,7 +2,7 @@
  * main.cpp
  *
  *  Created on: 26.05.2015
- *      Author: RDM
+ *  Author: RDM
  */
 
 
@@ -13,9 +13,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
 #include "vec3.hpp"
-
+#include "Table.h"
 
 static double alpha_x = 0;
 static double alpha_y = 0;
@@ -169,23 +168,21 @@ void Preview() {
 
 
   glLoadIdentity();				// Reset The Current Modelview Matrix
-  glTranslated(0, 0, -10.0);      // Move 10 units backwards in z,
                                   // since camera is at origin
   glRotated(alpha_x, 0, 1, 0);
   glRotated(alpha_y, 1, 0, 0);
   glScaled(xScale, yScale, zScale);
-
-
-
-
-  	SetMaterialColor( 1, 0, 1, 0);
-  	SetMaterialColor( 2, 0, 1, 0);
-  	drawDice( Vec3( 0, 0, 0), 2);
+  glPushMatrix();
+      SetMaterialColor(2, 0, .35, 0);
+      SetMaterialColor(1, 0.3, 0.2, 0.1);
+      Table table;
+      table.drawTable();
+  glPopMatrix();
 
 
 
   //pushmartix & popmatrix mehrere koordinatensysteme
-  	glPushMatrix();
+  /*old glPushMatrix();
   	glTranslatef(0,1,-1);
   	glRotated(alpha_z, 1, 0, 0);
 
@@ -195,7 +192,7 @@ void Preview() {
   	drawDeckel( Vec3( 0, 0, 0), 2);
   	glPopMatrix();
 
-
+*/
 }
 
 void rotate_W(int wert)
