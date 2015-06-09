@@ -5,9 +5,6 @@
  *  Author: RDM
  */
 
-
-
-
 #define GLFW_DLL
 #include <GLFW/glfw3.h>
 #include <stdlib.h>
@@ -22,71 +19,9 @@ static double alpha_z = 0;
 static bool rotate = false, open = false, perspektiv = true;
 static double window_width_ = 1024;
 static double window_height_ = 768;
-static double xScale, yScale, zScale;
+static double xScale, yScale, zScale, c = 0, d = 0, e = 0;
 
 
-
-void drawDice(Vec3 strg,double l){
-	//glNormal3fv
-	//glNormal3dv( strg );
-	//vorderseite
-	glBegin(GL_QUADS);											// Start Drawing A Triangle
-	glNormal3d(0,0,1);										// Set Top Point Of Triangle To Red
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2),strg.p[2]-(l/2));			// First Point Of The Triangle
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2));        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));		// Third Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));
-	//RUCKSEITE
-	glNormal3d(0,0,-1);
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2),strg.p[2]-(l/2)+l);			// First Point Of The Triangle
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);		// Third Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);
-	//links
-	glNormal3d(-1,0,0);
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2));			// First Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);		// Third Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));
-	//oben
-	//////////////////////////////////////////
-	/*
-	//oben
-	glNormal3d(0,1,0);
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));			// First Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2),strg.p[2]-(l/2)+l);
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));
-	*/
-	/////////////////////////////////////////
-	//rechts
-	glNormal3d(1,0,0);
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2));			// First Point Of The Triangle
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));
-	//unten
-	glNormal3d(0,-1,0);
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2));			// First Point Of The Triangle
-	glVertex3d(strg.p[0]-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2)+l);
-	glVertex3d(strg.p[0]+l-(l/2), strg.p[1]-(l/2), strg.p[2]-(l/2));
-	glEnd();
-
-	}
-
-void drawDeckel(Vec3 strg, double l){
-
-		glBegin(GL_QUADS);											// Start Drawing A Triangle
-		glNormal3d(0,1,0);
-
-		glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));			// First Point Of The Triangle
-		glVertex3d(strg.p[0]-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2)+l);        // Second Point Of The Triangle
-	    glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2),strg.p[2]-(l/2)+l);
-		glVertex3d(strg.p[0]+l-(l/2), strg.p[1]+l-(l/2), strg.p[2]-(l/2));
-		glEnd();
-
-}
 
 void SetMaterialColor(int side, double r, double g, double b) {
   float	amb[4], dif[4], spe[4];
@@ -151,12 +86,16 @@ void InitLighting() {
   glViewport(0, 0, window_width_, window_height_);
 
   // init coordinate system
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-15, 15, -10, 10, -20, 20);
+      glMatrixMode(GL_PROJECTION);
+      glLoadIdentity();
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+      // Perspektive:
+      glFrustum(-4,4,-3,3,10,300);
+      // Kameraposition
+      glTranslated(c, d,-28+e);
+
+      glMatrixMode(GL_MODELVIEW);
+      glLoadIdentity();
 }
 
 

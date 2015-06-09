@@ -109,5 +109,4 @@ void Table::drawTable(){
 		glVertex3f(-10.3,0.5,5.3);
 
 	glEnd();
-
 }
