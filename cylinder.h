@@ -1,18 +1,15 @@
-//
-//  Cylinder.h
-//  CG-Demo
-//
-//  Created by Tolga Özer on 12.06.14.
-//  Copyright (c) 2014 Tolga Özer. All rights reserved.
-//
+/*
+ * cylinder.h
+ *
+ *  Created on: 09.06.2015
+ *      Author: Mo
+ */
 
-#ifndef __CG_Demo__Cylinder__
-#define __CG_Demo__Cylinder__
+#ifndef CYLINDER_H_
+#define CYLINDER_H_
 
 #include <iostream>
-#include "Vec3.hpp"
-
-
+#include "vec3.hpp"
 
 class Cylinder {
 public:
@@ -34,4 +31,4 @@ public:
 };
 
 
-#endif /* defined(__CG_Demo__Cylinder__) */
+#endif /* CYLINDER_H_ */

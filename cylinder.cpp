@@ -1,12 +1,11 @@
-//
-//  Cylinder.cpp
-//  CG-Demo
-//
-//  Created by Tolga Özer on 12.06.14.
-//  Copyright (c) 2014 Tolga Özer. All rights reserved.
-//
+/*
+ * cylinder.cpp
+ *
+ *  Created on: 09.06.2015
+ *      Author: Mo
+ */
 
-#include "Cylinder.h"
+#include "cylinder.h"
 #include <GLFW/glfw3.h>
 #include "math.h"
 

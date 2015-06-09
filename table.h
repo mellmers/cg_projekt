@@ -1,8 +1,8 @@
 /*
- * Table.h
+ * table.h
  *
- *  Created on: 27.05.2014
- *      Author: Tobi
+ *  Created on: 09.06.2015
+ *  Author: RDM
  */
 
 #ifndef TABLE_H_

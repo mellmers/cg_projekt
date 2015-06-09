@@ -11,7 +11,8 @@
 #include <stdio.h>
 #include <math.h>
 #include "vec3.hpp"
-#include "Table.h"
+#include "table.h"
+#include "cylinder.h"
 
 static double alpha_x = 0;
 static double alpha_y = 0;
@@ -107,7 +108,7 @@ void Preview() {
 
 
   glLoadIdentity();				// Reset The Current Modelview Matrix
-                                  // since camera is at origin
+                                // since camera is at origin
   glRotated(alpha_x, 0, 1, 0);
   glRotated(alpha_y, 1, 0, 0);
   glScaled(xScale, yScale, zScale);
@@ -116,6 +117,12 @@ void Preview() {
       SetMaterialColor(1, 0.3, 0.2, 0.1);
       Table table;
       table.drawTable();
+  glPopMatrix();
+  glPushMatrix();
+  	  SetMaterialColor(2, 1, 0, 0);
+  	  SetMaterialColor(1, 0, 1, 0);
+  	  Cylinder cylinder;
+  	  cylinder.draw(Vec3(3,1,1));
   glPopMatrix();
 
 
