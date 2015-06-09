@@ -1,12 +1,6 @@
 .cproject
 .project
 .settings
-cg_projekt.exe
-CG-Projekt.exe
-Cylinder.o
-main.o
-sphere.o
-Table.o
-vec3.o
 /Default/
 /Default/cg_projekt.exe
+/Default
