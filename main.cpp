@@ -10,17 +10,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 #include "vec3.hpp"
 #include "table.h"
 #include "cylinder.h"
+#include "sphere.h"
 
-static double alpha_x = 0;
-static double alpha_y = 0;
-static double alpha_z = 0;
-static bool rotate = false, open = false, perspektiv = true;
+using namespace std;
+
+static double rotate_x = 0;
+static double rotate_y = 90;
+//static double alpha_z = 0;
 static double window_width_ = 1024;
 static double window_height_ = 768;
-static double xScale, yScale, zScale, c = 0, d = 0, e = 0;
+static double scale = 1, c = 0, d = 0, e = 0;
 
 
 
@@ -109,9 +112,9 @@ void Preview() {
 
   glLoadIdentity();				// Reset The Current Modelview Matrix
                                 // since camera is at origin
-  glRotated(alpha_x, 0, 1, 0);
-  glRotated(alpha_y, 1, 0, 0);
-  glScaled(xScale, yScale, zScale);
+  glRotated(rotate_x, 0, 1, 0);
+  glRotated(rotate_y, 1, 0, 0);
+  glScaled(scale, scale, scale);
   glPushMatrix();
       SetMaterialColor(2, 0, .35, 0);
       SetMaterialColor(1, 0.3, 0.2, 0.1);
@@ -122,7 +125,7 @@ void Preview() {
   	  SetMaterialColor(2, 1, 0, 0);
   	  SetMaterialColor(1, 0, 1, 0);
   	  Cylinder cylinder;
-  	  cylinder.draw(Vec3(3,1,1));
+  	  cylinder.draw(Vec3(100,100,100));
   glPopMatrix();
 
 
@@ -143,17 +146,27 @@ void Preview() {
 
 void rotate_W(int wert)
 {
-	 alpha_x += wert;
+	 rotate_x += wert;
+	 cout << "Rotate X: " << rotate_x << endl;
 }
 
 void rotate_H(int wert)
 {
-	 alpha_y += wert;
+	 rotate_y += wert;
+	 cout << "Rotate Y: " << rotate_y << endl;
 }
+/*
+ * wird bisher nicht benutzt
+
 void rotate_D(int wert){
 
-	alpha_y += wert;
+	rotate_y += wert;
+	cout << "Rotate Y: " << rotate_y << endl;
 }
+*/
+
+/*
+ * Brauchen wir open und close??
 
 void d_open(){
 	if(alpha_z < 70 ){
@@ -167,6 +180,7 @@ void d_close(){
 		}
 	else alpha_z = 0;
 }
+*/
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -178,34 +192,32 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	rotate_H(-1);
     }else if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     	rotate_H(1);
-    }else if(key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }
+    /*else if(key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     	d_open();
     }else if(key == GLFW_KEY_C && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     	d_close();
-    }else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-    	xScale+=0.2;
-    	yScale+=0.2;
-    	zScale+=0.2;
-    	printf("plus");
+    }*/
+    else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    	scale+=0.2;
+    	cout << "ZoomIn" << endl;
     }else if(key == GLFW_KEY_PAGE_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-    	xScale-=0.5;
-    	yScale-=0.5;
-    	zScale-=0.5;
-    	printf("minus");
+    	scale-=0.2;
+    	cout <<"ZoomOut" << endl;
     }
 }
 
 int main() {
   GLFWwindow* window = NULL;
 
-  printf("Here we go!\n");
+  cout << "Here we go!" << endl;
 
   if(!glfwInit()){
     return -1;
   }
 
   window = glfwCreateWindow(window_width_, window_height_,
-                            "Simple 3D Animation", NULL, NULL);
+                            "Minigolf", NULL, NULL);
   if(!window) {
     glfwTerminate();
     return -1;
@@ -235,7 +247,7 @@ int main() {
 
   glfwTerminate();
 
-  printf("Goodbye!\n");
+  cout << "Goodbye!" << endl;
 
   return 0;
 }
