@@ -8,13 +8,17 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
+#include <iostream>
+#include <math.h>
 #include "vec3.hpp"
+
+using namespace std;
 
 class Sphere {
 public:
 	Sphere();
 	virtual ~Sphere();
-	void draw();
+	void drawSphere(const Vec3& ctr, double r);
 };
 
 
