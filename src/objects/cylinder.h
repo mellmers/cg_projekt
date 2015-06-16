@@ -8,10 +8,12 @@
 #ifndef CYLINDER_H_
 #define CYLINDER_H_
 
-#include <iostream>
 #include <GLFW/glfw3.h>
 #include "math.h"
-#include "vec3.hpp"
+#include "../vec3.hpp"
+
+#include <iostream>
+using namespace std;
 
 class Cylinder {
 public:

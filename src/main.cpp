@@ -12,9 +12,9 @@
 #include <math.h>
 #include <iostream>
 #include "vec3.hpp"
-#include "table.h"
-#include "cylinder.h"
-#include "sphere.h"
+#include "./objects/table.h"
+#include "./objects/cylinder.h"
+#include "./objects/sphere.h"
 
 using namespace std;
 
@@ -25,6 +25,11 @@ static double window_width_ = 1024;
 static double window_height_ = 768;
 static double scale = 1, c = 0, d = 0, e = 0;
 
+
+// Objects
+Table table;
+Cylinder cylinder;
+Sphere sphere;
 
 
 void SetMaterialColor(int side, double r, double g, double b) {
@@ -102,7 +107,24 @@ void InitLighting() {
       glLoadIdentity();
 }
 
+void createWorld() {
+	glPushMatrix();
+		SetMaterialColor(2, 0, .35, 0);
+		SetMaterialColor(1, 0.3, 0.2, 0.1);
+		table.drawTable();
+	glPopMatrix();
 
+	glPushMatrix();
+		SetMaterialColor(2, 1, 0, 0);
+		SetMaterialColor(1, 0, 1, 0);
+		cylinder.draw(Vec3(100,100,100));
+	glPopMatrix();
+
+	glPushMatrix();
+		SetMaterialColor(3, 1, 1, 1);
+		sphere.draw(Vec3(0,.2,0),.2);
+	glPopMatrix();
+}
 
 // draw the entire scene
 void Preview() {
@@ -115,20 +137,8 @@ void Preview() {
   glRotated(rotate_x, 0, 1, 0);
   glRotated(rotate_y, 1, 0, 0);
   glScaled(scale, scale, scale);
-  glPushMatrix();
-      SetMaterialColor(2, 0, .35, 0);
-      SetMaterialColor(1, 0.3, 0.2, 0.1);
-      Table table;
-      table.drawTable();
-  glPopMatrix();
-  glPushMatrix();
-  	  SetMaterialColor(2, 1, 0, 0);
-  	  SetMaterialColor(1, 0, 1, 0);
-  	  Cylinder cylinder;
-  	  cylinder.draw(Vec3(100,100,100));
-  glPopMatrix();
 
-
+  createWorld();
 
   //pushmartix & popmatrix mehrere koordinatensysteme
   /*old glPushMatrix();

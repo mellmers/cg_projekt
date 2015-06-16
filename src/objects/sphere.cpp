@@ -8,14 +8,12 @@
 #include "sphere.h"
 
 Sphere::Sphere(){
-
 }
 
 Sphere::~Sphere(){
-
 }
 
-void Sphere::drawSphere(const Vec3& ctr, double r){
+void Sphere::draw(const Vec3& ctr, double r){
   int     i, j,
           n1 = 30, n2 = 30; // n1 und n2: Auflösung der Kugeln
   Vec3    normal, v1;

@@ -8,11 +8,9 @@
 #include "cylinder.h"
 
 Cylinder::Cylinder(){
-    
 }
 
 Cylinder::~Cylinder(){
-    
 }
 
 void Cylinder::setPosi(double xPosi, double zPosi){
