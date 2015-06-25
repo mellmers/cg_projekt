@@ -9,8 +9,6 @@
 #define TABLE_H_
 
 #include <GLFW/glfw3.h>
-#include <iostream>
-using namespace std;
 
 class Table {
 public:

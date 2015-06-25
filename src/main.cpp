@@ -11,26 +11,47 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include <vector>
 #include "vec3.hpp"
 #include "./objects/table.h"
 #include "./objects/cylinder.h"
 #include "./objects/sphere.h"
+#include "./objects/quader.h"
+#include "./objects/circle.h"
+#include "./objects/object.h"
 
 using namespace std;
 
 static double rotate_x = 0;
 static double rotate_y = 90;
 //static double alpha_z = 0;
-static double window_width_ = 1024;
-static double window_height_ = 768;
+static double window_width_ = 800;
+static double window_height_ = 600;
 static double scale = 1, c = 0, d = 0, e = 0;
 
 
 // Objects
 Table table;
-Cylinder cylinder;
-Sphere sphere;
+Sphere sphere1;
+Quader wall;
+Quader target;
 
+// Dynamic Objects
+const int allowedObjects = 5;
+Quader quader[allowedObjects];
+int quaderId = 0;
+bool quaderCreated[allowedObjects] = {false};
+Sphere sphere[allowedObjects];
+int sphereId = 0;
+bool sphereCreated[allowedObjects] = {false};
+Cylinder cylinder[allowedObjects];
+Circle circle[allowedObjects];
+int cylinderId = 0;
+bool cylinderCreated[allowedObjects] = {false};
+
+// Switchable Objects (Quader, Sphere, Cylinder)
+vector<Object*> selectableObjects;
+int selectedObjectId = 0;
 
 void SetMaterialColor(int side, double r, double g, double b) {
   float	amb[4], dif[4], spe[4];
@@ -59,8 +80,6 @@ void SetMaterialColor(int side, double r, double g, double b) {
   glMaterialfv(mat, GL_SPECULAR, spe);
   glMaterialf( mat, GL_SHININESS, 20);
 }
-
-
 
 // set viewport transformations and draw objects
 void InitLighting() {
@@ -108,21 +127,42 @@ void InitLighting() {
 }
 
 void createWorld() {
+	// Table
 	glPushMatrix();
 		SetMaterialColor(2, 0, .35, 0);
-		SetMaterialColor(1, 0.3, 0.2, 0.1);
+		SetMaterialColor(1, .3, .2, .1);
 		table.drawTable();
 	glPopMatrix();
 
+	// Cylinder
 	glPushMatrix();
 		SetMaterialColor(2, 1, 0, 0);
 		SetMaterialColor(1, 0, 1, 0);
-		cylinder.draw(Vec3(100,100,100));
+		//cylinder.draw(.5);
+		//circle.draw(.5);
 	glPopMatrix();
 
+	// Kugel
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
-		sphere.draw(Vec3(0,.2,0),.2);
+		sphere1.draw(Vec3(-8,.2,0), .2);
+	glPopMatrix();
+
+	// feste Mauer
+	glPushMatrix();
+		SetMaterialColor(1, .3, .2, .1);
+		wall.setX(4);
+		wall.setY(6);
+		wall.draw(.5,12);
+	glPopMatrix();
+
+	// Zielbereich
+	glPushMatrix();
+		SetMaterialColor(1, 0, 1, 0);
+		target.setX(5.25);
+		target.setY(2);
+		target.setH(.0005);
+		target.draw(4,4);
 	glPopMatrix();
 }
 
@@ -134,24 +174,35 @@ void Preview() {
 
   glLoadIdentity();				// Reset The Current Modelview Matrix
                                 // since camera is at origin
+
+  // Welt Rotation und Skalierung
   glRotated(rotate_x, 0, 1, 0);
   glRotated(rotate_y, 1, 0, 0);
   glScaled(scale, scale, scale);
 
   createWorld();
 
-  //pushmartix & popmatrix mehrere koordinatensysteme
-  /*old glPushMatrix();
-  	glTranslatef(0,1,-1);
-  	glRotated(alpha_z, 1, 0, 0);
+  // Draw Objects, if created
+  for (int i = 0; i < allowedObjects; i++)
+  {
+	  if(quaderCreated[i]) {
+		  glPushMatrix();
+			  quader[i].draw(1,1);
+		  glPopMatrix();
+	  }
+	  if(cylinderCreated[i]) {
+		  glPushMatrix();
+			  cylinder[i].draw(.5);
+			  circle[i].draw(.5);
+		  glPopMatrix();
+	  }
+	  if(sphereCreated[i]) {
+		  glPushMatrix();
+			  sphere[i].draw(Vec3(0,.2,0), .2);
+		  glPopMatrix();
+	  }
+  }
 
-
-  	glTranslatef(0,-1,-1);
-  	SetMaterialColor( 1, 1, 0, 0);
-  	drawDeckel( Vec3( 0, 0, 0), 2);
-  	glPopMatrix();
-
-*/
 }
 
 void rotate_W(int wert)
@@ -175,22 +226,17 @@ void rotate_D(int wert){
 }
 */
 
-/*
- * Brauchen wir open und close??
-
-void d_open(){
-	if(alpha_z < 70 ){
-		for(int i=0;i<=70;i++){alpha_z += .1;}
+bool vecEmpty() {
+	if(selectableObjects.empty()) {
+		cout << "SelectableObjects is empty. Please create an object." << endl;
+		return true;
 	}
-	else alpha_z = 70;
+	else if(selectedObjectId >= selectableObjects.size()) {
+		selectedObjectId = 0;
+		return false;
+	}
+	return false;
 }
-void d_close(){
-	if(alpha_z >= 0)
-		{for(int i=0;i<=70;i++){alpha_z -= .1;}
-		}
-	else alpha_z = 0;
-}
-*/
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
@@ -202,13 +248,81 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	rotate_H(-1);
     }else if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     	rotate_H(1);
-    }
-    /*else if(key == GLFW_KEY_O && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-    	d_open();
-    }else if(key == GLFW_KEY_C && (action == GLFW_PRESS || action == GLFW_REPEAT)){
-    	d_close();
-    }*/
-    else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// quader erzeugen
+    	if(quaderId < allowedObjects) {
+    		// save Quader
+			selectableObjects.push_back(&quader[quaderId]);
+			quaderCreated[quaderId] = true;
+			quaderId++;
+			// output and save ID
+			quader[quaderId-1].setId(quaderId);
+			cout << "Quader " << quaderId << " created"<< endl;
+			// select this as current object to move and scale
+			selectedObjectId++;
+    	} else {
+    		cout << "No more Quaders can be added" << endl;
+    	}
+    }else if(key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// cylinder erzeugen
+    	if(cylinderId < allowedObjects) {
+			// save cylinder
+			selectableObjects.push_back(&cylinder[cylinderId]);
+			cylinderCreated[cylinderId] = true;
+			cylinderId++;
+			// output and save ID
+			cylinder[cylinderId-1].setId(cylinderId);
+			cout << "Cylinder  " << cylinderId << " created"<< endl;
+			// select this as current object to move and scale
+			selectedObjectId++;
+		} else {
+			cout << "No more Cylinders can be added" << endl;
+		}
+    }else if(key == GLFW_KEY_3 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// sphere erzeugen
+    	if(sphereId < allowedObjects) {
+			// save sphere
+			selectableObjects.push_back(&sphere[sphereId]);
+			sphereCreated[sphereId] = true;
+			sphereId++;
+			// output and save ID
+			sphere[sphereId-1].setId(sphereId);
+			cout << "Sphere " << sphereId << " created"<< endl;
+			// select this as current object to move and scale
+			selectedObjectId++;
+		} else {
+			cout << "No more Spheres can be added" << endl;
+		}
+    }else if(key == GLFW_KEY_N && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // objektauswahl zurück
+		if (!vecEmpty()) {
+			selectedObjectId--;
+			if(selectedObjectId < 0) {
+				selectedObjectId = selectableObjects.size()-1;
+			}
+			cout << "SelectedObject: " << selectableObjects.at(selectedObjectId)->getObjectType() << " " << selectableObjects.at(selectedObjectId)->getId() << endl;
+		}
+    }else if(key == GLFW_KEY_M && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// objektauswahl vor
+		if (!vecEmpty()) {
+			selectedObjectId++;
+			if(selectedObjectId > selectableObjects.size()-1) {
+				selectedObjectId = 0;
+			}
+			cout << "SelectedObject: " << selectableObjects.at(selectedObjectId)->getObjectType() << " " << selectableObjects.at(selectedObjectId)->getId() << endl;
+		}
+    }else if(key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    	if(!vecEmpty()) {
+    		selectableObjects.at(selectedObjectId)->move(-.1,0);
+    	}
+    }else if(key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    	if(!vecEmpty()) {
+    		selectableObjects.at(selectedObjectId)->move(.1, 0);
+    	}
+    }else if(key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    	if(!vecEmpty()) {
+    		selectableObjects.at(selectedObjectId)->move(0, .1);
+    	}
+    }else if(key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    	if(!vecEmpty()) {
+    		selectableObjects.at(selectedObjectId)->move(0, -.1);
+    	}
+    }else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
     	scale+=0.2;
     	cout << "ZoomIn" << endl;
     }else if(key == GLFW_KEY_PAGE_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){

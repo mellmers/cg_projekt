@@ -7,13 +7,15 @@
 
 #include "sphere.h"
 
-Sphere::Sphere(){
+Sphere::Sphere() : Object(){
+	cout << "Sphere created" << endl;
+	setObjectType("Sphere");
 }
 
 Sphere::~Sphere(){
 }
 
-void Sphere::draw(const Vec3& ctr, double r){
+void Sphere::draw(const Vec3& ctr, double radius){
   int     i, j,
           n1 = 30, n2 = 30; // n1 und n2: Auflösung der Kugeln
   Vec3    normal, v1;
@@ -21,6 +23,9 @@ void Sphere::draw(const Vec3& ctr, double r){
           a2, a2d = M_PI / n2,
           s1, s2,
           c1, c2;
+  r = radius;
+
+  glTranslated(x, 0, -y);
 
   glShadeModel(GL_SMOOTH);
   for(i = 0; i < n1; i++){

@@ -8,14 +8,12 @@
 #ifndef SPHERE_H_
 #define SPHERE_H_
 
-#include <GLFW/glfw3.h>
-#include <math.h>
-#include "../vec3.hpp"
+#include "object.h"
 
 #include <iostream>
 using namespace std;
 
-class Sphere {
+class Sphere : public Object {
 public:
 	Sphere();
 	virtual ~Sphere();
