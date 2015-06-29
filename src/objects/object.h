@@ -20,11 +20,16 @@ public:
 	Object();
 	virtual ~Object();
 	void move(double setx, double sety);
+	void scale(double scale);
+	void rotate(double d);
 
 	double getX();
 	double getY();
 	double getH();
 	double getR();
+	double getXWidth();
+	double getYWidth();
+	double getDegree();
 	string getObjectType();
 	int getId();
 
@@ -32,12 +37,14 @@ public:
 	void setY(double yPosition);
 	void setH(double height);
 	void setR(double radius);
+	void setXWidth(double x);
+	void setYWidth(double y);
 	void setObjectType(string t);
 	void setId(int value);
 
 	int id;
 	string objectType;
-	double x,y,h,r;
+	double x,y,h,r,xWidth,yWidth,s,degree;
 };
 
 #endif /* OBJECT_H_ */

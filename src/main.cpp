@@ -134,18 +134,10 @@ void createWorld() {
 		table.drawTable();
 	glPopMatrix();
 
-	// Cylinder
-	glPushMatrix();
-		SetMaterialColor(2, 1, 0, 0);
-		SetMaterialColor(1, 0, 1, 0);
-		//cylinder.draw(.5);
-		//circle.draw(.5);
-	glPopMatrix();
-
 	// Kugel
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
-		sphere1.draw(Vec3(-8,.2,0), .2);
+		sphere1.draw(Vec3(-8,.5,0));
 	glPopMatrix();
 
 	// feste Mauer
@@ -153,7 +145,9 @@ void createWorld() {
 		SetMaterialColor(1, .3, .2, .1);
 		wall.setX(4);
 		wall.setY(6);
-		wall.draw(.5,12);
+		wall.draw();
+		wall.setXWidth(.5);
+		wall.setYWidth(12);
 	glPopMatrix();
 
 	// Zielbereich
@@ -162,7 +156,9 @@ void createWorld() {
 		target.setX(5.25);
 		target.setY(2);
 		target.setH(.0005);
-		target.draw(4,4);
+		target.draw();
+		target.setXWidth(4);
+		target.setYWidth(4);
 	glPopMatrix();
 }
 
@@ -178,27 +174,28 @@ void Preview() {
   // Welt Rotation und Skalierung
   glRotated(rotate_x, 0, 1, 0);
   glRotated(rotate_y, 1, 0, 0);
+
   glScaled(scale, scale, scale);
 
   createWorld();
 
-  // Draw Objects, if created
+  // Draw createable Objects
   for (int i = 0; i < allowedObjects; i++)
   {
 	  if(quaderCreated[i]) {
 		  glPushMatrix();
-			  quader[i].draw(1,1);
+			  quader[i].draw();
 		  glPopMatrix();
 	  }
 	  if(cylinderCreated[i]) {
 		  glPushMatrix();
-			  cylinder[i].draw(.5);
-			  circle[i].draw(.5);
+			  cylinder[i].draw();
+			  circle[i].draw();
 		  glPopMatrix();
 	  }
 	  if(sphereCreated[i]) {
 		  glPushMatrix();
-			  sphere[i].draw(Vec3(0,.2,0), .2);
+			  sphere[i].draw(Vec3(0,sphere[i].getR(),0));
 		  glPopMatrix();
 	  }
   }
@@ -216,15 +213,6 @@ void rotate_H(int wert)
 	 rotate_y += wert;
 	 cout << "Rotate Y: " << rotate_y << endl;
 }
-/*
- * wird bisher nicht benutzt
-
-void rotate_D(int wert){
-
-	rotate_y += wert;
-	cout << "Rotate Y: " << rotate_y << endl;
-}
-*/
 
 bool vecEmpty() {
 	if(selectableObjects.empty()) {
@@ -240,13 +228,16 @@ bool vecEmpty() {
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+	//Spiel verlassen und Fenster schließen
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	}else if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // world rotate
         rotate_W(1);
-    }else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // world rotate
     	rotate_W(-1);
-    }else if(key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // world rotate
     	rotate_H(-1);
-    }else if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // world rotate
     	rotate_H(1);
     }else if(key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// quader erzeugen
     	if(quaderId < allowedObjects) {
@@ -258,7 +249,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			quader[quaderId-1].setId(quaderId);
 			cout << "Quader " << quaderId << " created"<< endl;
 			// select this as current object to move and scale
-			selectedObjectId++;
+			selectedObjectId = selectableObjects.size()-1;
     	} else {
     		cout << "No more Quaders can be added" << endl;
     	}
@@ -272,7 +263,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			cylinder[cylinderId-1].setId(cylinderId);
 			cout << "Cylinder  " << cylinderId << " created"<< endl;
 			// select this as current object to move and scale
-			selectedObjectId++;
+			selectedObjectId = selectableObjects.size()-1;
 		} else {
 			cout << "No more Cylinders can be added" << endl;
 		}
@@ -286,7 +277,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			sphere[sphereId-1].setId(sphereId);
 			cout << "Sphere " << sphereId << " created"<< endl;
 			// select this as current object to move and scale
-			selectedObjectId++;
+			selectedObjectId = selectableObjects.size()-1;
 		} else {
 			cout << "No more Spheres can be added" << endl;
 		}
@@ -306,28 +297,44 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			}
 			cout << "SelectedObject: " << selectableObjects.at(selectedObjectId)->getObjectType() << " " << selectableObjects.at(selectedObjectId)->getId() << endl;
 		}
-    }else if(key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // move -x
     	if(!vecEmpty()) {
     		selectableObjects.at(selectedObjectId)->move(-.1,0);
     	}
-    }else if(key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // move x
     	if(!vecEmpty()) {
     		selectableObjects.at(selectedObjectId)->move(.1, 0);
     	}
-    }else if(key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // move y
     	if(!vecEmpty()) {
     		selectableObjects.at(selectedObjectId)->move(0, .1);
     	}
-    }else if(key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // move -y
     	if(!vecEmpty()) {
     		selectableObjects.at(selectedObjectId)->move(0, -.1);
     	}
-    }else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_PAGE_UP && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // zoom in world
     	scale+=0.2;
     	cout << "ZoomIn" << endl;
-    }else if(key == GLFW_KEY_PAGE_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){
+    }else if(key == GLFW_KEY_PAGE_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // zoom out world
     	scale-=0.2;
     	cout <<"ZoomOut" << endl;
+    }else if(key == GLFW_KEY_KP_ADD && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // scale +
+    	if(!vecEmpty()) {
+			selectableObjects.at(selectedObjectId)->scale(.1);
+		}
+    }else if(key == GLFW_KEY_KP_SUBTRACT && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // scale -
+    	if(!vecEmpty()) {
+			selectableObjects.at(selectedObjectId)->scale(-.1);
+		}
+    }else if(key == GLFW_KEY_R && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate +
+    	if(!vecEmpty()) {
+			selectableObjects.at(selectedObjectId)->rotate(5);
+		}
+    }else if(key == GLFW_KEY_E && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate -
+    	if(!vecEmpty()) {
+			selectableObjects.at(selectedObjectId)->rotate(-5);
+		}
     }
 }
 

@@ -16,9 +16,7 @@ Circle::~Circle(){
 }
 
 
-void Circle::draw(double radius){
-
-	r = radius;
+void Circle::draw(){
 
     double x1,y1,x2,y2;
     double angle;

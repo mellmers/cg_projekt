@@ -17,7 +17,7 @@ class Cylinder : public Object {
 public:
 	Cylinder();
 	virtual ~Cylinder();
-    void draw(double radius);
+    void draw();
 
 
 

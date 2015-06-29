@@ -69,26 +69,26 @@ bool Cylinder::colFinish(double gameSphereX, double gameSphereZ){
 }
 
 
-void Cylinder::draw(double radius){
-    
-	r = radius;
+void Cylinder::draw(){
 
-    glTranslated(x, 0, -y);
+	glTranslated(x, 0, -y);
+	glRotated(degree, 0, 1, 0);
+	glScaled(s, s, s);
     
     glBegin(GL_QUAD_STRIP);
     for( double angle = 0; angle < 2*M_PI + 1; angle += (M_PI / 360.0) ) {
         
         glVertex3f(
-                   ( 0.5*(cos(angle)*1) ),
+                   ( r*(cos(angle)*1) ),
                    ( (0)  ),
-                   ( 0.5*(sin(angle)*1) )
+                   ( r*(sin(angle)*1) )
                    );
         
         
         glVertex3f(
-                   ( 0.5*(cos(angle)*1) ),
+                   ( r*(cos(angle)*1) ),
                    ( (h)  ),					// zylinder höhe
-                   ( 0.5*(sin(angle)*1) )
+                   ( r*(sin(angle)*1) )
                    );
     }
     glEnd ();

@@ -10,8 +10,12 @@
 Object::Object(){
 	x = 0;
 	y = 0;
-	r = 0;
+	degree = 0;
+	r = .5;
 	h = 1;
+	s = 1;
+	xWidth = 1;
+	yWidth = 1;
 	setObjectType("Object");
 }
 
@@ -32,6 +36,18 @@ double Object::getH(){
 
 double Object::getR(){
 	return r;
+}
+
+double Object::getXWidth(){
+	return xWidth;
+}
+
+double Object::getYWidth(){
+	return yWidth;
+}
+
+double Object::getDegree(){
+	return degree;
 }
 
 string Object::getObjectType() {
@@ -56,6 +72,22 @@ void Object::setH(double height){
 
 void Object::setR(double radius){
 	r = radius;
+}
+
+void Object::setXWidth(double x){
+	xWidth = x;
+}
+
+void Object::setYWidth(double y){
+	yWidth = y;
+}
+
+void Object::scale(double scale){
+	s += scale;
+}
+
+void Object::rotate(double d){
+	degree += d;
 }
 
 void Object::move(double setx, double sety){

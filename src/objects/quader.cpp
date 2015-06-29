@@ -17,10 +17,12 @@ Quader::Quader() : Object(){
 Quader::~Quader(){
 }
 
-void Quader::draw(double xWidth, double yWidth){
+void Quader::draw(){
 
 	glTranslated(x, 0, -y);
-	//cout << Object::x << " " << Object::y << endl;
+	glRotated(degree, 0, 1, 0);
+	glScaled(s, s, s);
+
 
 	double p [8][3];
 	p[0][0] = 0; p[0][1] = 0; p[0][2] = 0; 	// p0

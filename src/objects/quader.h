@@ -14,7 +14,7 @@ class Quader : public Object {
 public:
 	Quader();
 	virtual ~Quader();
-	void draw(double xWidth, double yWidth);
+	void draw();
 };
 
 #endif /* QUADER_H_ */

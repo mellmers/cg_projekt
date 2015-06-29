@@ -15,7 +15,7 @@ Sphere::Sphere() : Object(){
 Sphere::~Sphere(){
 }
 
-void Sphere::draw(const Vec3& ctr, double radius){
+void Sphere::draw(const Vec3& ctr){
   int     i, j,
           n1 = 30, n2 = 30; // n1 und n2: Auflösung der Kugeln
   Vec3    normal, v1;
@@ -23,9 +23,10 @@ void Sphere::draw(const Vec3& ctr, double radius){
           a2, a2d = M_PI / n2,
           s1, s2,
           c1, c2;
-  r = radius;
 
   glTranslated(x, 0, -y);
+  glRotated(degree, 0, 1, 0);
+  glScaled(s, s, s);
 
   glShadeModel(GL_SMOOTH);
   for(i = 0; i < n1; i++){

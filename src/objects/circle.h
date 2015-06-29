@@ -14,7 +14,7 @@ class Circle : public Object {
 public:
 	Circle();
 	virtual ~Circle();
-	void draw(double radius);
+	void draw();
 };
 
 #endif /* CIRCLE_H_ */
