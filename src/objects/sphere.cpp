@@ -16,6 +16,8 @@ Sphere::~Sphere(){
 }
 
 void Sphere::draw(const Vec3& ctr){
+	x = ctr.p[0];
+	y = ctr.p[2];
   int     i, j,
           n1 = 30, n2 = 30; // n1 und n2: Auflösung der Kugeln
   Vec3    normal, v1;

@@ -36,7 +36,7 @@ Sphere sphere1;
 Quader wall;
 Quader target;
 
-double spherePositionX = -8, spherePositionY = .5, sphereSpeed = .005;
+double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .005;
 int direction = 1;
 bool sphereStart = false;
 
@@ -184,7 +184,7 @@ void controls() {
 	bool testCol, x,y = false;
 	x = quader->collsX(sphere1.x);
 	y = quader->collsX(sphere1.y);
-	std::cout << sphere1.x;
+	cout << sphere1.getX()<<endl;
 	testCol = quader->collsQuader(sphere1.x, sphere1.y);
 	if(x){
 		std::cout << "collision mit X";
