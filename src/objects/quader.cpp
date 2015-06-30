@@ -12,10 +12,56 @@ Quader::Quader() : Object(){
 	y = .5;
 	cout << "Quader created" << endl;
 	setObjectType("Quader");
+
+	collisionX = false;
+	collisionY = false;
 }
 
 Quader::~Quader(){
 }
+
+
+bool Quader::collsQuader(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-.5 < x && SphX+.5 > x){  		//x Wert  des Objektes überprüft mit Kugelradius .2
+		if(SphY-.5 < x && SphY+.5 > x ){ 	//z Wert des Objekt überprüft
+			collisionY = true;
+			}else{
+				collisionY = false;
+			}								//
+		collisionX = true;
+	}else{
+		collisionX = false;
+
+	}
+	if(collisionX && collisionY){
+			std::cout << 'Kollision mit Quader Object';
+			return true;
+		} else {
+			return false;
+		}
+}
+
+bool Quader::collsX(double SphereX){
+	SphX = SphereX;
+	if(SphX-.5 < x && SphY+.5 > x) {
+
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Quader::collsY(double SphereY){
+	SphY = SphereY;
+	if(SphY-.5 < y && SphY+.5 > y) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+
 
 void Quader::draw(){
 
@@ -75,3 +121,4 @@ void Quader::draw(){
 		glVertex3d(p[4][0],p[4][1],p[4][2]);
 	glEnd();
 }
+

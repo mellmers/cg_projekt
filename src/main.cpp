@@ -162,6 +162,24 @@ void createWorld() {
 	glPopMatrix();
 }
 
+
+void controls() {
+
+	//Kollisionsverhalten
+	//kollision mit dem Würfel
+	bool testCol, x,y = false;
+	x = quader->collsX(sphere1.x);
+	y = quader->collsX(sphere1.y);
+	std::cout << sphere1.x;
+	testCol = quader->collsQuader(sphere1.x, sphere1.y);
+	if(x){
+		std::cout << "collision mit X";
+	}else if(y){
+		std::cout << "collision mit Y";
+	}
+
+}
+
 // draw the entire scene
 void Preview() {
 
@@ -200,7 +218,12 @@ void Preview() {
 	  }
   }
 
+  controls();
+
+
+
 }
+
 
 void rotate_W(int wert)
 {
