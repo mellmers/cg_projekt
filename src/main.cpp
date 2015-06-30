@@ -36,6 +36,10 @@ Sphere sphere1;
 Quader wall;
 Quader target;
 
+double spherePositionX = -8, spherePositionY = .5, sphereSpeed = .005;
+int direction = 1;
+bool sphereStart = false;
+
 // Dynamic Objects
 const int allowedObjects = 5;
 Quader quader[allowedObjects];
@@ -137,7 +141,17 @@ void createWorld() {
 	// Kugel
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
-		sphere1.draw(Vec3(-8,.5,0));
+		if(sphereStart) {
+			if(true){ // wenn Collision, dann Richtung ändern
+
+			}
+			spherePositionX += sphereSpeed * direction;
+			//spherePositionY += sphereSpeed * direction;
+			if(sphereSpeed >= 0) {
+				sphereSpeed -= .000001;
+			}
+		}
+		sphere1.draw(Vec3(spherePositionX,0,spherePositionY));
 	glPopMatrix();
 
 	// feste Mauer
@@ -335,6 +349,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	if(!vecEmpty()) {
 			selectableObjects.at(selectedObjectId)->rotate(-5);
 		}
+    }else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Kugel starten
+    	cout << "Kugel startet" << endl;
+    	sphereStart = true;
+    	//cout << "Kugel steht still" << endl;
     }
 }
 
