@@ -20,14 +20,13 @@ public:
     void draw();
 
 
+    bool collisionX, collisionY;
+	bool collsCylinder(double sphereX, double sphereY);
+	bool collsX(double sphereX),collsY(double sphereY);
 
-	bool colCylinder(double gameSphereX, double gameSphereZ);
-	bool colFinish(double gameSphereX, double gameSphereZ);
+	double SphX,SphY;
 	double sphereX, sphereZ;
-	bool collisionX, collisionZ;
 
-	bool colX(double gameSphereX);
-	bool colZ(double gameSphereZ);
 };
 
 

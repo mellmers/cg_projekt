@@ -180,17 +180,42 @@ void createWorld() {
 void controls() {
 
 	//Kollisionsverhalten
+
 	//kollision mit dem Würfel
-	bool testCol, x,y = false;
+	bool testColls, x,y;
 	x = quader->collsX(sphere1.x);
 	y = quader->collsX(sphere1.y);
 	cout << sphere1.getX()<<endl;
-	testCol = quader->collsQuader(sphere1.x, sphere1.y);
+	testColls = quader->collsQuader(sphere1.x, sphere1.y);
 	if(x){
-		std::cout << "collision mit X";
+		if(testColls){
+		    cout << "collision mit X" << endl;
+		}
+
 	}else if(y){
-		std::cout << "collision mit Y";
+		if(testColls){
+			cout << "collision mit Y" << endl;
+		}
+
 	}
+
+	//Sphere im Ziel?
+	x = target.collsX(sphere1.x);
+	y = target.collsY(sphere1.y);
+	testColls = target.collsZiel(sphere1.x, sphere1.y);
+	if(x){
+			if(testColls){
+			    cout << "Kugel ist im Ziel X" << endl;
+			}
+
+		}else if(y){
+			if(testColls){
+				cout << "Kugel ist im Ziel Y" << endl;
+			}
+
+		}
+
+
 
 }
 

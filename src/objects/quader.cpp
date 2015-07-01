@@ -8,8 +8,8 @@
 #include "quader.h"
 
 Quader::Quader() : Object(){
-	x = -1.5;
-	y = .5;
+	x = 0;
+	y = 0;
 	cout << "Quader created" << endl;
 	setObjectType("Quader");
 
@@ -23,8 +23,8 @@ Quader::~Quader(){
 
 bool Quader::collsQuader(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-.5 < x && SphX+.5 > x){  		//x Wert  des Objektes überprüft mit Kugelradius .2
-		if(SphY-.5 < x && SphY+.5 > x ){ 	//z Wert des Objekt überprüft
+	if(SphX-(s+.5) < x && SphX+(s+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(s+.5) < y && SphY+(s+.5) > y ){ 	//y Wert des Objekt überprüft
 			collisionY = true;
 			}else{
 				collisionY = false;
@@ -35,7 +35,6 @@ bool Quader::collsQuader(double SphereX, double SphereY){
 
 	}
 	if(collisionX && collisionY){
-			std::cout << 'Kollision mit Quader Object';
 			return true;
 		} else {
 			return false;
@@ -44,7 +43,7 @@ bool Quader::collsQuader(double SphereX, double SphereY){
 
 bool Quader::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-.5 < x && SphY+.5 > x) {
+	if(SphX-(s+.5) < x && SphY+(s+.5) > x) {
 
 		return true;
 	} else {
@@ -54,13 +53,27 @@ bool Quader::collsX(double SphereX){
 
 bool Quader::collsY(double SphereY){
 	SphY = SphereY;
-	if(SphY-.5 < y && SphY+.5 > y) {
+	if(SphY-(s+.5) < y && SphY+(s+.5) > y) {
 		return true;
 	} else {
 		return false;
 	}
 }
 
+
+bool Quader::collsZiel(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-(this->xWidth/2) < x && SphX+(this->xWidth/2) > x) {
+		if(SphX-(this->xWidth/2) < y && SphY+(this->xWidth/2) > y) {
+			collisionY = true;
+		} else {
+			collisionY = false;
+		}
+		return collisionX = true;
+	} else {
+		return collisionX = false;
+	}
+}
 
 
 void Quader::draw(){
