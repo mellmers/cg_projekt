@@ -32,20 +32,24 @@ static double scale = 1, c = 0, d = 0, e = 0;
 
 // Objects
 Table table;
-Sphere sphere1;
+Sphere *sphere1 = new Sphere();
 Quader wall;
 Quader target;
 
+double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .005;
+bool directionX = true;
+bool sphereStart = false;
+
 // Dynamic Objects
 const int allowedObjects = 5;
-Quader quader[allowedObjects];
+Quader *quader[allowedObjects];
 int quaderId = 0;
 bool quaderCreated[allowedObjects] = {false};
-Sphere sphere[allowedObjects];
+Sphere *sphere[allowedObjects];
 int sphereId = 0;
 bool sphereCreated[allowedObjects] = {false};
-Cylinder cylinder[allowedObjects];
-Circle circle[allowedObjects];
+Cylinder *cylinder[allowedObjects];
+Circle *circle[allowedObjects];
 int cylinderId = 0;
 bool cylinderCreated[allowedObjects] = {false};
 
@@ -137,7 +141,18 @@ void createWorld() {
 	// Kugel
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
-		sphere1.draw(Vec3(-8,.5,0));
+		if(sphereStart) {
+			if(true){ // wenn Collision, dann Richtung ändern
+
+			}
+			int direction = directionX ? 1 : -1;
+			spherePositionX += sphereSpeed * direction;
+			//spherePositionY += sphereSpeed * direction;
+			if(sphereSpeed >= 0) {
+				sphereSpeed -= .000001;
+			}
+		}
+		sphere1->draw(Vec3(spherePositionX,0,spherePositionY));
 	glPopMatrix();
 
 	// feste Mauer
@@ -162,6 +177,34 @@ void createWorld() {
 	glPopMatrix();
 }
 
+
+void checkCollision() {
+
+	//Kollisionsverhalten
+	//kollision mit dem Würfel
+	/*
+	bool testCol, x,y = false;
+	x = quader->collsX(sphere1.x);
+	y = quader->collsX(sphere1.y);
+	cout << sphere1.getX()<<endl;
+	testCol = quader->collsQuader(sphere1.x, sphere1.y);
+	if(x){
+		std::cout << "collision mit X";
+	}else if(y){
+		std::cout << "collision mit Y";
+	}
+	*/
+
+	// Kollision mit der festen Mauer
+	double sphereX = sphere1->getX() + sphere1->getR() / 2;
+	double wallX = wall.getX() + wall.getXWidth();
+	if(sphereX == wallX) {
+		directionX = !directionX;
+		cout << "Collision with wall" << endl;
+	}
+
+}
+
 // draw the entire scene
 void Preview() {
 
@@ -177,6 +220,8 @@ void Preview() {
 
   glScaled(scale, scale, scale);
 
+  checkCollision();
+
   createWorld();
 
   // Draw createable Objects
@@ -184,23 +229,23 @@ void Preview() {
   {
 	  if(quaderCreated[i]) {
 		  glPushMatrix();
-			  quader[i].draw();
+			  quader[i]->draw();
 		  glPopMatrix();
 	  }
 	  if(cylinderCreated[i]) {
 		  glPushMatrix();
-			  cylinder[i].draw();
-			  circle[i].draw();
+			  cylinder[i]->draw();
+			  circle[i]->draw();
 		  glPopMatrix();
 	  }
 	  if(sphereCreated[i]) {
 		  glPushMatrix();
-			  sphere[i].draw(Vec3(0,sphere[i].getR(),0));
+			  sphere[i]->draw(Vec3(0,sphere[i]->getR(),0));
 		  glPopMatrix();
 	  }
   }
-
 }
+
 
 void rotate_W(int wert)
 {
@@ -242,44 +287,44 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     }else if(key == GLFW_KEY_1 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// quader erzeugen
     	if(quaderId < allowedObjects) {
     		// save Quader
-			selectableObjects.push_back(&quader[quaderId]);
+			selectableObjects.push_back(quader[quaderId]);
 			quaderCreated[quaderId] = true;
 			quaderId++;
 			// output and save ID
-			quader[quaderId-1].setId(quaderId);
+			quader[quaderId-1]->setId(quaderId);
 			cout << "Quader " << quaderId << " created"<< endl;
 			// select this as current object to move and scale
 			selectedObjectId = selectableObjects.size()-1;
     	} else {
     		cout << "No more Quaders can be added" << endl;
     	}
-    }else if(key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// cylinder erzeugen
-    	if(cylinderId < allowedObjects) {
-			// save cylinder
-			selectableObjects.push_back(&cylinder[cylinderId]);
-			cylinderCreated[cylinderId] = true;
-			cylinderId++;
-			// output and save ID
-			cylinder[cylinderId-1].setId(cylinderId);
-			cout << "Cylinder  " << cylinderId << " created"<< endl;
-			// select this as current object to move and scale
-			selectedObjectId = selectableObjects.size()-1;
-		} else {
-			cout << "No more Cylinders can be added" << endl;
-		}
-    }else if(key == GLFW_KEY_3 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// sphere erzeugen
+    }else if(key == GLFW_KEY_2 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// sphere erzeugen
     	if(sphereId < allowedObjects) {
 			// save sphere
-			selectableObjects.push_back(&sphere[sphereId]);
+			selectableObjects.push_back(sphere[sphereId]);
 			sphereCreated[sphereId] = true;
 			sphereId++;
 			// output and save ID
-			sphere[sphereId-1].setId(sphereId);
+			sphere[sphereId-1]->setId(sphereId);
 			cout << "Sphere " << sphereId << " created"<< endl;
 			// select this as current object to move and scale
 			selectedObjectId = selectableObjects.size()-1;
 		} else {
 			cout << "No more Spheres can be added" << endl;
+		}
+    }else if(key == GLFW_KEY_3 && (action == GLFW_PRESS || action == GLFW_REPEAT)){	// cylinder erzeugen
+    	if(cylinderId < allowedObjects) {
+			// save cylinder
+			selectableObjects.push_back(cylinder[cylinderId]);
+			cylinderCreated[cylinderId] = true;
+			cylinderId++;
+			// output and save ID
+			cylinder[cylinderId-1]->setId(cylinderId);
+			cout << "Cylinder  " << cylinderId << " created"<< endl;
+			// select this as current object to move and scale
+			selectedObjectId = selectableObjects.size()-1;
+		} else {
+			cout << "No more Cylinders can be added" << endl;
 		}
     }else if(key == GLFW_KEY_N && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // objektauswahl zurück
 		if (!vecEmpty()) {
@@ -335,6 +380,35 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	if(!vecEmpty()) {
 			selectableObjects.at(selectedObjectId)->rotate(-5);
 		}
+    }else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Kugel starten
+    	cout << "Sphere start" << endl;
+    	sphereStart = true;
+    	//cout << "Sphere stop" << endl;
+    }else if(key == GLFW_KEY_BACKSPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Alles zurücksetzen
+    	selectableObjects.clear();
+    	selectedObjectId = 0;
+    	delete sphere1;
+    	sphere1 = new Sphere();
+    	memset(quader, '\0', sizeof(quader));
+    	memset(sphere, '\0', sizeof(sphere));
+    	memset(cylinder, '\0', sizeof(cylinder));
+    	memset(circle, '\0', sizeof(circle));
+    	for (int i = 0; i < allowedObjects; i++) {
+    		quader[i] = new Quader();
+    		quaderId = 0;
+    		quaderCreated[i] = false;
+    		sphere[i] = new Sphere();
+    		sphereId = 0;
+    		sphereCreated[i] = false;
+			cylinder[i] = new Cylinder();
+			cylinderId = 0;
+			cylinderCreated[i] = false;
+			circle[i] = new Circle();
+    	}
+    	spherePositionX = -4, spherePositionY = 0, sphereSpeed = .005;
+    	directionX = true;
+    	sphereStart = false;
+    	cout << "Game reset" << endl;
     }
 }
 
@@ -355,6 +429,14 @@ int main() {
   }
 
   glfwMakeContextCurrent(window);
+
+  // Init Arrays with Objects
+  for (int i = 0; i < allowedObjects; i++) {
+  	quader[i] = new Quader();
+  	sphere[i] = new Sphere();
+  	cylinder[i] = new Cylinder();
+  	circle[i] = new Circle();
+  }
 
   while(!glfwWindowShouldClose(window)) {
     // switch on lighting (or you don't see anything)
