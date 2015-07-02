@@ -10,9 +10,49 @@
 Sphere::Sphere() : Object(){
 	cout << "Sphere created" << endl;
 	setObjectType("Sphere");
+
 }
 
 Sphere::~Sphere(){
+}
+
+bool Sphere::collsSphere(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
+			collisionY = true;
+			}else{
+				collisionY = false;
+			}								//
+		collisionX = true;
+	}else{
+		collisionX = false;
+
+	}
+	if(collisionX && collisionY){
+			return true;
+		} else {
+			return false;
+		}
+}
+
+bool Sphere::collsX(double SphereX){
+	SphX = SphereX;
+	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
+
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Sphere::collsY(double SphereY){
+	SphY = SphereY;
+	if(SphY-(r+.5) < y && SphY+(r+.5) > y) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 void Sphere::draw(const Vec3& ctr){

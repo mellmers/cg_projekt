@@ -18,6 +18,11 @@ public:
 	Sphere();
 	virtual ~Sphere();
 	void draw(const Vec3& ctr);
+	bool collisionX, collisionY;
+	bool collsSphere(double sphereX, double sphereY);
+	bool collsX(double sphereX),collsY(double sphereY);
+	double SphX,SphY;
+
 };
 
 

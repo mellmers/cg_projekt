@@ -13,8 +13,6 @@ Quader::Quader() : Object(){
 	cout << "Quader created" << endl;
 	setObjectType("Quader");
 
-	collisionX = false;
-	collisionY = false;
 }
 
 Quader::~Quader(){
@@ -23,8 +21,8 @@ Quader::~Quader(){
 
 bool Quader::collsQuader(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-(s+.5) < x && SphX+(s+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
-		if(SphY-(s+.5) < y && SphY+(s+.5) > y ){ 	//y Wert des Objekt überprüft
+	if(SphX-(xWidth+.5) < x && SphX+(xWidth+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(xWidth+.5) < y && SphY+(xWidth+.5) > y ){ 	//y Wert des Objekt überprüft
 			collisionY = true;
 			}else{
 				collisionY = false;
@@ -43,7 +41,7 @@ bool Quader::collsQuader(double SphereX, double SphereY){
 
 bool Quader::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-(s+.5) < x && SphY+(s+.5) > x) {
+	if(SphX-(xWidth+.5) < x && SphY+(xWidth+.5) > x) {
 
 		return true;
 	} else {
@@ -53,7 +51,7 @@ bool Quader::collsX(double SphereX){
 
 bool Quader::collsY(double SphereY){
 	SphY = SphereY;
-	if(SphY-(s+.5) < y && SphY+(s+.5) > y) {
+	if(SphY-(xWidth+.5) < y && SphY+(xWidth+.5) > y) {
 		return true;
 	} else {
 		return false;
@@ -63,8 +61,8 @@ bool Quader::collsY(double SphereY){
 
 bool Quader::collsZiel(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-(this->xWidth/2) < x && SphX+(this->xWidth/2) > x) {
-		if(SphX-(this->xWidth/2) < y && SphY+(this->xWidth/2) > y) {
+	if(SphX-(this->xWidth) > x && SphX+(this->xWidth) < x) {
+		if(SphX-(this->xWidth) > y && SphY+(this->xWidth) < y) {
 			collisionY = true;
 		} else {
 			collisionY = false;
@@ -73,7 +71,33 @@ bool Quader::collsZiel(double SphereX, double SphereY){
 	} else {
 		return collisionX = false;
 	}
+	if(collisionX && collisionY){
+				return true;
+			} else {
+				return false;
+		}
 }
+
+
+bool Quader::collsXziel(double SphereX){
+	SphX = SphereX;
+	if(SphX-(this->xWidth) > x && SphX+(this->xWidth) < x) {
+
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Quader::collsYziel(double SphereY){
+	SphY = SphereY;
+	if(SphX-(this->xWidth) > y && SphY+(this->xWidth) < y) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 
 
 void Quader::draw(){
