@@ -12,6 +12,7 @@
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <typeinfo>
 #include "vec3.hpp"
 #include "./objects/table.h"
 #include "./objects/cylinder.h"
@@ -36,8 +37,9 @@ Sphere *sphere1 = new Sphere();
 Quader wall;
 Quader target;
 
-double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .005;
+double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .01;
 bool directionX = true;
+bool directionY = true;
 bool sphereStart = false;
 
 // Dynamic Objects
@@ -55,7 +57,7 @@ bool cylinderCreated[allowedObjects] = {false};
 
 // Switchable Objects (Quader, Sphere, Cylinder)
 vector<Object*> selectableObjects;
-int selectedObjectId = 0;
+unsigned int selectedObjectId = 0;
 
 void SetMaterialColor(int side, double r, double g, double b) {
   float	amb[4], dif[4], spe[4];
@@ -142,17 +144,17 @@ void createWorld() {
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
 		if(sphereStart) {
-			if(true){ // wenn Collision, dann Richtung ändern
-
-			}
-			int direction = directionX ? 1 : -1;
-			spherePositionX += sphereSpeed * direction;
-			//spherePositionY += sphereSpeed * direction;
+			int dirX = directionX ? 1 : -1;
+			int dirY = directionY ? 1 : -1;
+			spherePositionX += sphereSpeed * dirX;
+			spherePositionY += sphereSpeed * dirY;
 			if(sphereSpeed >= 0) {
 				sphereSpeed -= .000001;
 			}
 		}
-		sphere1->draw(Vec3(spherePositionX,0,spherePositionY));
+		sphere1->setX(spherePositionX);
+		sphere1->setY(spherePositionY);
+		sphere1->draw();
 	glPopMatrix();
 
 	// feste Mauer
@@ -160,9 +162,9 @@ void createWorld() {
 		SetMaterialColor(1, .3, .2, .1);
 		wall.setX(4);
 		wall.setY(6);
-		wall.draw();
 		wall.setXWidth(.5);
 		wall.setYWidth(12);
+		wall.draw();
 	glPopMatrix();
 
 	// Zielbereich
@@ -195,14 +197,39 @@ void checkCollision() {
 	}
 	*/
 
+	// aktuelle Position der Kugel
+	double sphereX = (sphere1->getX() + sphere1->getR() / 2) * 2;
+	double sphereY = sphere1->getY() + sphere1->getR() / 2;
 	// Kollision mit der festen Mauer
-	double sphereX = sphere1->getX() + sphere1->getR() / 2;
-	double wallX = wall.getX() + wall.getXWidth();
-	if(sphereX == wallX) {
+	double wallXLeft = wall.getX();
+	double wallXRight = wall.getX() + wall.getXWidth();
+	if(sphereX > wallXLeft && sphereX < wallXRight) {
 		directionX = !directionX;
 		cout << "Collision with wall" << endl;
 	}
-
+	// Kollision mit dem Tisch in X
+	if(sphereX <= -9 || sphereX >= 10) {
+		directionX = !directionX;
+		cout << "Collision with table X" << endl;
+	}
+	// Kollision mit dem Tisch in Y
+	if(sphereY >= 7.5 || sphereY <= -7){
+		directionY = !directionY;
+		cout << "Collision with table Y" << endl;
+	}
+	sphereX = (float)((int)(sphereX*10))/10;
+	sphereY = (float)((int)(sphereY*10))/10;
+	//cout << sphereX << " | " << sphereY << endl;
+	// Kollision mit Quader
+	/*for(unsigned int i = 0; i < selectableObjects.size(); i++) {
+		Object *o = selectableObjects.at(i);
+		double x = o->getX();
+		double y = o->getY();
+		if(o->getObjectType() == "Quader" && sphereX == x) {
+			directionX = !directionX;
+			cout << "Collision with Quader" << endl;
+		}
+	}*/
 }
 
 // draw the entire scene
@@ -240,7 +267,7 @@ void Preview() {
 	  }
 	  if(sphereCreated[i]) {
 		  glPushMatrix();
-			  sphere[i]->draw(Vec3(0,sphere[i]->getR(),0));
+			  sphere[i]->draw();
 		  glPopMatrix();
 	  }
   }
@@ -405,7 +432,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			cylinderCreated[i] = false;
 			circle[i] = new Circle();
     	}
-    	spherePositionX = -4, spherePositionY = 0, sphereSpeed = .005;
+    	spherePositionX = -4, spherePositionY = 0, sphereSpeed = .008;
     	directionX = true;
     	sphereStart = false;
     	cout << "Game reset" << endl;

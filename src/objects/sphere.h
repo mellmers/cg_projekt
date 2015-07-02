@@ -17,7 +17,7 @@ class Sphere : public Object {
 public:
 	Sphere();
 	virtual ~Sphere();
-	void draw(const Vec3& ctr);
+	void draw();
 };
 
 
