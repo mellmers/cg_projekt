@@ -180,6 +180,88 @@ void createWorld() {
 }
 
 
+void controls() {
+
+	//Kollisionsverhalten
+
+	//kollision mit dem Würfel
+	bool testColls, x,y;
+	x = quader->collsX(sphere1.x);
+	y = quader->collsX(sphere1.y);
+	cout << sphere1.getX()<<endl;
+	testColls = quader->collsQuader(sphere1.x, sphere1.y);
+	if(x){
+		if(testColls){
+			cout << "collision mit X" << endl;
+		}
+
+	}else if(y){
+		if(testColls){
+			cout << "collision mit Y" << endl;
+		}
+
+	}
+
+
+
+	/*	//Sphere im Ziel?
+	 * *****************************************************
+	x = target.collsXziel(sphere1.x);
+	y = target.collsYziel(sphere1.y);
+	cout << x << endl;
+	testColls = target.collsZiel(sphere1.x, sphere1.y);
+	if(x){
+			if(testColls){
+			    cout << "Kugel ist im Ziel X" << endl;
+			}
+
+		}else if(y){
+			if(testColls){
+				cout << "Kugel ist im Ziel Y" << endl;
+			}
+
+		}
+
+	**********************************************************/
+
+	//kollision mit dem Sphere
+	x = sphere->collsX(sphere1.x);
+	y = sphere->collsX(sphere1.y);
+	cout << sphere1.getX()<<endl;
+	testColls = sphere->collsSphere(sphere1.x, sphere1.y);
+	if(x){
+		if(testColls){
+			cout << "collision mit X" << endl;
+		}
+
+	}else if(y){
+		if(testColls){
+			cout << "collision mit Y" << endl;
+		}
+
+	}
+
+
+	//kollision mit dem Cylinder
+	x = cylinder->collsX(sphere1.x);
+	y = cylinder->collsX(sphere1.y);
+	cout << sphere1.getX()<<endl;
+	testColls = cylinder->collsCylinder(sphere1.x, sphere1.y);
+	if(x){
+		if(testColls){
+			cout << "collision mit X" << endl;
+		}
+
+	}else if(y){
+		if(testColls){
+			cout << "collision mit Y" << endl;
+		}
+
+	}
+
+
+}
+
 void checkCollision() {
 
 	//Kollisionsverhalten
@@ -271,6 +353,10 @@ void Preview() {
 		  glPopMatrix();
 	  }
   }
+  controls();
+
+
+
 }
 
 

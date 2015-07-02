@@ -15,56 +15,42 @@ Cylinder::Cylinder() : Object(){
 
 Cylinder::~Cylinder(){
 }
-
-bool Cylinder::colCylinder(double gameSphereX, double gameSphereZ){
-	sphereX = gameSphereX, sphereZ = gameSphereZ;
-	if(sphereX-0.8 < x && sphereX+0.8 > x) {
-		if(sphereZ-0.8 < h && sphereZ+0.8 > h) {
-			collisionZ = true;
-		} else {
-			collisionZ = false;
-		}
+bool Cylinder::collsCylinder(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
+			collisionY = true;
+			}else{
+				collisionY = false;
+			}								//
 		collisionX = true;
-	} else {
+	}else{
 		collisionX = false;
-	}
-	if(collisionX && collisionZ){
-		return true;
-	} else {
-		return false;
-	}
-}
 
-bool Cylinder::colX(double gameSphereX){
-	sphereX = gameSphereX;
-	if(sphereX-0.8 < x && sphereX+0.8 > x) {
-
-		return true;
-	} else {
-		return false;
 	}
-}
-
-bool Cylinder::colZ(double gameSphereZ){
-	sphereX = gameSphereZ;
-	if(sphereZ-0.8 < h && sphereZ+0.8 > h) {
-		return true;
-	} else {
-		return false;
-	}
-}
-
-bool Cylinder::colFinish(double gameSphereX, double gameSphereZ){
-	sphereX = gameSphereX, sphereZ = gameSphereZ;
-	if(sphereX-0.25 < x && sphereX+0.25 > x) {
-		if(sphereZ-0.25 < h && sphereZ+0.25 > h) {
-			collisionZ = true;
+	if(collisionX && collisionY){
+			return true;
 		} else {
-			collisionZ = false;
+			return false;
 		}
-		return collisionX = true;
+}
+
+bool Cylinder::collsX(double SphereX){
+	SphX = SphereX;
+	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
+
+		return true;
 	} else {
-		return collisionX = false;
+		return false;
+	}
+}
+
+bool Cylinder::collsY(double SphereY){
+	SphY = SphereY;
+	if(SphY-(r+.5) < y && SphY+(r+.5) > y) {
+		return true;
+	} else {
+		return false;
 	}
 }
 

@@ -13,12 +13,53 @@ Sphere::Sphere() : Object(){
 	r = .5;
 	cout << "Sphere created" << endl;
 	setObjectType("Sphere");
+
 }
 
 Sphere::~Sphere(){
 }
 
-void Sphere::draw(){
+bool Sphere::collsSphere(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
+			collisionY = true;
+			}else{
+				collisionY = false;
+			}								//
+		collisionX = true;
+	}else{
+		collisionX = false;
+
+	}
+	if(collisionX && collisionY){
+			return true;
+		} else {
+			return false;
+		}
+}
+
+bool Sphere::collsX(double SphereX){
+	SphX = SphereX;
+	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
+
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Sphere::collsY(double SphereY){
+	SphY = SphereY;
+	if(SphY-(r+.5) < y && SphY+(r+.5) > y) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+void Sphere::draw(const Vec3& ctr){	x = ctr.p[0];
+	y = ctr.p[2];
   int     i, j,
           n1 = 30, n2 = 30; // n1 und n2: Auflösung der Kugeln
   Vec3    normal, v1, v2;
