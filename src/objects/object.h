@@ -44,7 +44,7 @@ public:
 
 	int id;
 	string objectType;
-	double x,y,h,r,xWidth,yWidth,s,degree;
+	double x, y, h, r, xWidth, yWidth, s, degree, SphX, SphY;
 };
 
 #endif /* OBJECT_H_ */

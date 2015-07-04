@@ -21,8 +21,6 @@ public:
 	bool collisionX, collisionY;
 	bool collsSphere(double sphereX, double sphereY);
 	bool collsX(double sphereX),collsY(double sphereY);
-	double SphX,SphY;
-
 };
 
 

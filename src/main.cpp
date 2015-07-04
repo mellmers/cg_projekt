@@ -38,8 +38,8 @@ Quader wall;
 Quader target;
 
 double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .01;
-bool directionX = true;
-bool directionY = true;
+static bool directionX = true;
+static bool directionY = true;
 bool sphereStart = false;
 
 // Dynamic Objects
@@ -179,109 +179,87 @@ void createWorld() {
 	glPopMatrix();
 }
 
-
-void controls() {
-
-	//Kollisionsverhalten
-
-	//kollision mit dem Würfel
-	bool testColls, x,y;
-	x = quader->collsX(sphere1.x);
-	y = quader->collsX(sphere1.y);
-	cout << sphere1.getX()<<endl;
-	testColls = quader->collsQuader(sphere1.x, sphere1.y);
-	if(x){
-		if(testColls){
-			cout << "collision mit X" << endl;
-		}
-
-	}else if(y){
-		if(testColls){
-			cout << "collision mit Y" << endl;
-		}
-
-	}
-
-
-
-	/*	//Sphere im Ziel?
-	 * *****************************************************
-	x = target.collsXziel(sphere1.x);
-	y = target.collsYziel(sphere1.y);
-	cout << x << endl;
-	testColls = target.collsZiel(sphere1.x, sphere1.y);
-	if(x){
-			if(testColls){
-			    cout << "Kugel ist im Ziel X" << endl;
-			}
-
-		}else if(y){
-			if(testColls){
-				cout << "Kugel ist im Ziel Y" << endl;
-			}
-
-		}
-
-	**********************************************************/
-
-	//kollision mit dem Sphere
-	x = sphere->collsX(sphere1.x);
-	y = sphere->collsX(sphere1.y);
-	cout << sphere1.getX()<<endl;
-	testColls = sphere->collsSphere(sphere1.x, sphere1.y);
-	if(x){
-		if(testColls){
-			cout << "collision mit X" << endl;
-		}
-
-	}else if(y){
-		if(testColls){
-			cout << "collision mit Y" << endl;
-		}
-
-	}
-
-
-	//kollision mit dem Cylinder
-	x = cylinder->collsX(sphere1.x);
-	y = cylinder->collsX(sphere1.y);
-	cout << sphere1.getX()<<endl;
-	testColls = cylinder->collsCylinder(sphere1.x, sphere1.y);
-	if(x){
-		if(testColls){
-			cout << "collision mit X" << endl;
-		}
-
-	}else if(y){
-		if(testColls){
-			cout << "collision mit Y" << endl;
-		}
-
-	}
-
-
-}
-
 void checkCollision() {
 
-	//Kollisionsverhalten
-	//kollision mit dem Würfel
-	/*
-	bool testCol, x,y = false;
-	x = quader->collsX(sphere1.x);
-	y = quader->collsX(sphere1.y);
-	cout << sphere1.getX()<<endl;
-	testCol = quader->collsQuader(sphere1.x, sphere1.y);
-	if(x){
-		std::cout << "collision mit X";
-	}else if(y){
-		std::cout << "collision mit Y";
-	}
-	*/
+	// Kollisionsverhalten
 
 	// aktuelle Position der Kugel
 	double sphereX = (sphere1->getX() + sphere1->getR() / 2) * 2;
 	double sphereY = sphere1->getY() + sphere1->getR() / 2;
+
+	// kollision mit dem Würfel
+	bool testColls, x,y;
+
+	for(int i = 0; i < allowedObjects; i++) {
+		x = quader[i]->collsX(sphereX);
+		y = quader[i]->collsX(sphereY);
+		testColls = quader[i]->collsQuader(sphereX, sphereY);
+		if(x){
+			if(testColls){
+				directionX = !directionX;
+				cout << "collision quader with X" << endl;
+			}
+		}else if(y){
+			if(testColls){
+				directionY = !directionY;
+				cout << "collision quader with Y" << endl;
+			}
+		}
+
+		/*	//Sphere im Ziel?
+		 * *****************************************************
+		x = target.collsXziel(sphere1.x);
+		y = target.collsYziel(sphere1.y);
+		cout << x << endl;
+		testColls = target.collsZiel(sphere1.x, sphere1.y);
+		if(x){
+				if(testColls){
+					cout << "Kugel ist im Ziel X" << endl;
+				}
+
+			}else if(y){
+				if(testColls){
+					cout << "Kugel ist im Ziel Y" << endl;
+				}
+
+			}
+
+		**********************************************************/
+
+		//kollision mit dem Sphere
+		x = sphere[i]->collsX(sphere1->getX());
+		y = sphere[i]->collsX(sphere1->getY());
+		testColls = sphere[i]->collsSphere(sphere1->getX(), sphere1->getY());
+		if(x){
+			if(testColls){
+				directionX = !directionX;
+				cout << "collision sphere with X" << endl;
+			}
+		}else if(y){
+			if(testColls){
+				directionY = !directionY;
+				cout << "collision sphere with Y" << endl;
+			}
+		}
+
+
+		//kollision mit dem Cylinder
+		x = cylinder[0]->collsX(sphere1->getX());
+		y = cylinder[0]->collsX(sphere1->getY());
+		testColls = cylinder[0]->collsCylinder(sphere1->getX(), sphere1->getY());
+		if(x){
+			if(testColls){
+				directionX = !directionX;
+				cout << "collision cylinder with X" << endl;
+			}
+		}else if(y){
+			if(testColls){
+				directionY = !directionY;
+				cout << "collision cylinder with Y" << endl;
+			}
+		}
+	}
+
 	// Kollision mit der festen Mauer
 	double wallXLeft = wall.getX();
 	double wallXRight = wall.getX() + wall.getXWidth();
@@ -353,10 +331,6 @@ void Preview() {
 		  glPopMatrix();
 	  }
   }
-  controls();
-
-
-
 }
 
 

@@ -13,32 +13,30 @@ Cylinder::Cylinder() : Object(){
 	setObjectType("Cylinder");
 }
 
-Cylinder::~Cylinder(){
-}
+Cylinder::~Cylinder(){}
+
 bool Cylinder::collsCylinder(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
 	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
 		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
 			collisionY = true;
-			}else{
-				collisionY = false;
-			}								//
+		}else{
+			collisionY = false;
+		}
 		collisionX = true;
 	}else{
 		collisionX = false;
-
 	}
 	if(collisionX && collisionY){
-			return true;
-		} else {
-			return false;
-		}
+		return true;
+	} else {
+		return false;
+	}
 }
 
 bool Cylinder::collsX(double SphereX){
 	SphX = SphereX;
 	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
-
 		return true;
 	} else {
 		return false;
@@ -53,7 +51,6 @@ bool Cylinder::collsY(double SphereY){
 		return false;
 	}
 }
-
 
 void Cylinder::draw(){
 

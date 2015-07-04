@@ -19,14 +19,9 @@ public:
 	virtual ~Cylinder();
     void draw();
 
-
     bool collisionX, collisionY;
 	bool collsCylinder(double sphereX, double sphereY);
 	bool collsX(double sphereX),collsY(double sphereY);
-
-	double SphX,SphY;
-	double sphereX, sphereZ;
-
 };
 
 
