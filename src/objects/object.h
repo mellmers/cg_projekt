@@ -27,6 +27,7 @@ public:
 	double getY();
 	double getH();
 	double getR();
+	double getZ();
 	double getXWidth();
 	double getYWidth();
 	double getDegree();
@@ -37,6 +38,7 @@ public:
 	void setY(double yPosition);
 	void setH(double height);
 	void setR(double radius);
+	void setZ(double zPosition);
 	void setXWidth(double x);
 	void setYWidth(double y);
 	void setObjectType(string t);
@@ -44,7 +46,7 @@ public:
 
 	int id;
 	string objectType;
-	double x, y, h, r, xWidth, yWidth, s, degree, SphX, SphY;
+	double x, y, h, r, z, xWidth, yWidth, s, degree, SphX, SphY;
 };
 
 #endif /* OBJECT_H_ */

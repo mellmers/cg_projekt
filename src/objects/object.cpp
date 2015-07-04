@@ -14,6 +14,7 @@ Object::Object(){
 	r = .5;
 	h = 1;
 	s = 1;
+	z = 0;
 	xWidth = 1;
 	yWidth = 1;
 	setObjectType("Object");
@@ -36,6 +37,10 @@ double Object::getH(){
 
 double Object::getR(){
 	return r;
+}
+
+double Object::getZ(){
+	return z;
 }
 
 double Object::getXWidth(){
@@ -72,6 +77,10 @@ void Object::setH(double height){
 
 void Object::setR(double radius){
 	r = radius;
+}
+
+void Object::setZ(double zPosition){
+	z = zPosition;
 }
 
 void Object::setXWidth(double x){

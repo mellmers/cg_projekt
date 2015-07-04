@@ -65,7 +65,7 @@ void Sphere::draw(){
 
 	v1 = Vec3(x, r, 0);
 
-	glTranslated(x, 0, -y);
+	glTranslated(x, z, -y);
 	glRotated(degree, 0, 1, 0);
 	glScaled(s, s, s);
 

@@ -92,7 +92,7 @@ bool Quader::collsYziel(double SphereY){
 
 void Quader::draw(){
 
-	glTranslated(x, 0, -y);
+	glTranslated(x, z, -y);
 	glRotated(degree, 0, 1, 0);
 	glScaled(s, s, s);
 

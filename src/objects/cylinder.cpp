@@ -54,7 +54,7 @@ bool Cylinder::collsY(double SphereY){
 
 void Cylinder::draw(){
 
-	glTranslated(x, 0, -y);
+	glTranslated(x, z, -y);
 	glRotated(degree, 0, 1, 0);
 	glScaled(s, s, s);
     
