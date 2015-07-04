@@ -17,7 +17,7 @@ Cylinder::~Cylinder(){}
 
 bool Cylinder::collsCylinder(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x && this->getZ() < 1){  		//x Wert  des Objektes überprüft mit Kugelradius .5
 		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
 			collisionY = true;
 		}else{
@@ -36,7 +36,7 @@ bool Cylinder::collsCylinder(double SphereX, double SphereY){
 
 bool Cylinder::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
+	if(SphX-(r+.5) < x && SphY+(r+.5) > x && this->getZ() < 1) {
 		return true;
 	} else {
 		return false;
@@ -45,7 +45,7 @@ bool Cylinder::collsX(double SphereX){
 
 bool Cylinder::collsY(double SphereY){
 	SphY = SphereY;
-	if(SphY-(r+.5) < y && SphY+(r+.5) > y) {
+	if(SphY-(r+.5) < y && SphY+(r+.5) > y && this->getZ() < 1) {
 		return true;
 	} else {
 		return false;

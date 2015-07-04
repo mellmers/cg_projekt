@@ -19,8 +19,8 @@ Sphere::~Sphere(){}
 
 bool Sphere::collsSphere(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-(r+.5) < x && SphX+(r+.5) > x){  		//x Wert  des Objektes überprüft mit Kugelradius .5
-		if(SphY-(r+.5) < y && SphY+(r+.5) > y ){ 	//y Wert des Objekt überprüft
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x && this->getZ() < 1){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-(r+.5) < y && SphY+(r+.5) > y && this->getZ() < 1){ 	//y Wert des Objekt überprüft
 			collisionY = true;
 		}else{
 			collisionY = false;
@@ -38,7 +38,7 @@ bool Sphere::collsSphere(double SphereX, double SphereY){
 
 bool Sphere::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-(r+.5) < x && SphY+(r+.5) > x) {
+	if(SphX-(r+.5) < x && SphY+(r+.5) > x && this->getZ() < 1) {
 		return true;
 	}else{
 		return false;
@@ -47,7 +47,7 @@ bool Sphere::collsX(double SphereX){
 
 bool Sphere::collsY(double SphereY){
 	SphY = SphereY;
-	if(SphY-(r+.5) < y && SphY+(r+.5) > y) {
+	if(SphY-(r+.5) < y && SphY+(r+.5) > y && this->getZ() < 1) {
 		return true;
 	} else {
 		return false;
