@@ -36,7 +36,7 @@ bool Cylinder::collsCylinder(double SphereX, double SphereY){
 
 bool Cylinder::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-(r+.5) < x && SphY+(r+.5) > x && this->getZ() < 1) {
+	if(SphX-(r+.5) < x && SphX+(r+.5) > x && this->getZ() < 1) {
 		return true;
 	} else {
 		return false;

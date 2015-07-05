@@ -38,8 +38,8 @@ Quader wall;
 Quader target;
 
 double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .01;
-static bool directionX = true;
-static bool directionY = true;
+bool directionX = true;
+bool directionY = true;
 bool sphereStart = false;
 
 // Dynamic Objects
@@ -54,6 +54,8 @@ Cylinder *cylinder[allowedObjects];
 Circle *circle[allowedObjects];
 int cylinderId = 0;
 bool cylinderCreated[allowedObjects] = {false};
+int objectZ = 15;
+double objectZAnimation = objectZ;
 
 // Switchable Objects (Quader, Sphere, Cylinder)
 vector<Object*> selectableObjects;
@@ -149,7 +151,7 @@ void createWorld() {
 			spherePositionX += sphereSpeed * dirX;
 			spherePositionY += sphereSpeed * dirY;
 			if(sphereSpeed >= 0) {
-				sphereSpeed -= .000001;
+				sphereSpeed -= .0000001;
 			}
 		}
 		sphere1->setX(spherePositionX);
@@ -179,6 +181,7 @@ void createWorld() {
 	glPopMatrix();
 }
 
+
 void checkCollision() {
 
 	// Kollisionsverhalten
@@ -191,7 +194,7 @@ void checkCollision() {
 	bool testColls, x,y;
 
 	for(int i = 0; i < allowedObjects; i++) {
-		x = quader[i]->collsX(sphere1->getX());
+		x = quader[i]->collsX(sphere1->getX()+.1) && quader[i]->collsX(sphere1->getX()-.1);
 		y = quader[i]->collsY(sphere1->getY());
 		testColls = quader[i]->collsQuader(sphere1->getX(), sphere1->getY());
 		if(x){
@@ -227,7 +230,7 @@ void checkCollision() {
 		**********************************************************/
 
 		//kollision mit dem Sphere
-		x = sphere[i]->collsX(sphere1->getX());
+		x = sphere[i]->collsX(sphere1->getX()+.1) && sphere[i]->collsX(sphere1->getX()-.1);
 		y = sphere[i]->collsY(sphere1->getY());
 		testColls = sphere[i]->collsSphere(sphere1->getX(), sphere1->getY());
 		if(x){
@@ -244,7 +247,7 @@ void checkCollision() {
 
 
 		//kollision mit dem Cylinder
-		x = cylinder[0]->collsX(sphere1->getX());
+		x = cylinder[0]->collsX(sphere1->getX()+.1) && cylinder[i]->collsX(sphere1->getX()-.1);
 		y = cylinder[0]->collsY(sphere1->getY());
 		testColls = cylinder[0]->collsCylinder(sphere1->getX(), sphere1->getY());
 		if(x){
@@ -291,7 +294,6 @@ void checkCollision() {
 		}
 	}*/
 }
-
 // draw the entire scene
 void Preview() {
 
@@ -314,20 +316,27 @@ void Preview() {
   // Draw createable Objects
   for (int i = 0; i < allowedObjects; i++)
   {
+	  if(objectZAnimation > 0) {
+		  objectZAnimation -= 0.01;
+	  }
 	  if(quaderCreated[i]) {
 		  glPushMatrix();
 			  quader[i]->draw();
+			  quader[i]->setZ(objectZAnimation);
 		  glPopMatrix();
 	  }
 	  if(cylinderCreated[i]) {
 		  glPushMatrix();
 			  cylinder[i]->draw();
+			  cylinder[i]->setZ(objectZAnimation);
 			  circle[i]->draw();
+			  circle[i]->setZ(objectZAnimation);
 		  glPopMatrix();
 	  }
 	  if(sphereCreated[i]) {
 		  glPushMatrix();
 			  sphere[i]->draw();
+			  sphere[i]->setZ(objectZAnimation);
 		  glPopMatrix();
 	  }
   }
@@ -382,6 +391,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			cout << "Quader " << quaderId << " created"<< endl;
 			// select this as current object to move and scale
 			selectedObjectId = selectableObjects.size()-1;
+			objectZAnimation = objectZ;
     	} else {
     		cout << "No more Quaders can be added" << endl;
     	}
@@ -396,6 +406,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			cout << "Sphere " << sphereId << " created"<< endl;
 			// select this as current object to move and scale
 			selectedObjectId = selectableObjects.size()-1;
+			objectZAnimation = objectZ;
 		} else {
 			cout << "No more Spheres can be added" << endl;
 		}
@@ -410,6 +421,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			cout << "Cylinder  " << cylinderId << " created"<< endl;
 			// select this as current object to move and scale
 			selectedObjectId = selectableObjects.size()-1;
+			objectZAnimation = objectZ;
 		} else {
 			cout << "No more Cylinders can be added" << endl;
 		}
@@ -484,13 +496,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     		quader[i] = new Quader();
     		quaderId = 0;
     		quaderCreated[i] = false;
+    		quader[i]->setZ(objectZ);
     		sphere[i] = new Sphere();
     		sphereId = 0;
     		sphereCreated[i] = false;
+    		sphere[i]->setZ(objectZ);
 			cylinder[i] = new Cylinder();
 			cylinderId = 0;
 			cylinderCreated[i] = false;
+			cylinder[i]->setZ(objectZ);
 			circle[i] = new Circle();
+			circle[i]->setZ(objectZ);
     	}
     	spherePositionX = -4, spherePositionY = 0, sphereSpeed = .008;
     	directionX = true;
@@ -519,10 +535,14 @@ int main() {
 
   // Init Arrays with Objects
   for (int i = 0; i < allowedObjects; i++) {
-  	quader[i] = new Quader();
-  	sphere[i] = new Sphere();
-  	cylinder[i] = new Cylinder();
-  	circle[i] = new Circle();
+	quader[i] = new Quader();
+	sphere[i] = new Sphere();
+	cylinder[i] = new Cylinder();
+	circle[i] = new Circle();
+	quader[i]->setZ(objectZ);
+	sphere[i]->setZ(objectZ);
+	cylinder[i]->setZ(objectZ);
+	circle[i]->setZ(objectZ);
   }
 
   while(!glfwWindowShouldClose(window)) {
