@@ -8,8 +8,6 @@
 #include "sphere.h"
 
 Sphere::Sphere() : Object(){
-	x = 0;
-	y = 0;
 	r = .5;
 	cout << "Sphere created" << endl;
 	setObjectType("Sphere");

@@ -11,7 +11,7 @@
 #include "object.h"
 
 #include <iostream>
-using namespace std;
+
 
 class Sphere : public Object {
 public:

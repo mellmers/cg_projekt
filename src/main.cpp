@@ -189,79 +189,133 @@ void checkCollision() {
 	// aktuelle Position der Kugel
 	double sphereX = (sphere1->getX() + sphere1->getR() / 2) * 2;
 	double sphereY = sphere1->getY() + sphere1->getR() / 2;
+//
+//	// kollision mit dem Würfel
+//	bool testColls, x,y;
+//
+//	for(int i = 0; i < allowedObjects; i++) {
+//		x = quader[i]->collsX(sphereX+.1) && quader[i]->collsX(sphereX-.1);
+//		y = quader[i]->collsY(sphereY);
+//		testColls = quader[i]->collsQuader(sphereX, sphereY);
+//		if(x){
+//			if(testColls){
+//				directionX = !directionX;
+//				cout << "collision quader with X" << endl;
+//			}
+//		}else if(y){
+//			if(testColls){
+//				directionY = !directionY;
+//				cout << "collision quader with Y" << endl;
+//			}
+//		}
+//
+//		/*
+//		 *
+//		 * //Sphere im Ziel?
+//		x = target.collsXziel(sphere1.x);
+//		y = target.collsYziel(sphere1.y);
+//		cout << x << endl;
+//		testColls = target.collsZiel(sphere1.x, sphere1.y);
+//		if(x){
+//				if(testColls){
+//					cout << "Kugel ist im Ziel X" << endl;
+//				}
+//
+//			}else if(y){
+//				if(testColls){
+//					cout << "Kugel ist im Ziel Y" << endl;
+//				}
+//
+//			}
+//
+//		*/
+//
+//
+//		//kollision mit dem Sphere
+//		x = sphere[i]->collsX(sphereX+.1) && sphere[i]->collsX(sphereX-.1);
+//		y = sphere[i]->collsY(sphereY);
+//		testColls = sphere[i]->collsSphere(sphereX, sphereY);
+//		if(x){
+//			if(testColls){
+//				directionX = !directionX;
+//				cout << "collision sphere with X" << endl;
+//			}
+//		}else if(y){
+//			if(testColls){
+//				directionY = !directionY;
+//				cout << "collision sphere with Y" << endl;
+//			}
+//		}
+//
+//
+//		//kollision mit dem Cylinder
+//		x = cylinder[0]->collsX(sphereX+.1) && cylinder[i]->collsX(sphereX-.1);
+//		y = cylinder[0]->collsY(sphereY);
+//		testColls = cylinder[0]->collsCylinder(sphereX, sphereY);
+//		if(x){
+//			if(testColls){
+//				directionX = !directionX;
+//				cout << "collision cylinder with X" << endl;
+//			}
+//		}else if(y){
+//			if(testColls){
+//				directionY = !directionY;
+//				cout << "collision cylinder with Y" << endl;
+//			}
+//		}
+//	}
+//
+//
 
-	// kollision mit dem Würfel
-	bool testColls, x,y;
 
-	for(int i = 0; i < allowedObjects; i++) {
-		x = quader[i]->collsX(sphere1->getX()+.1) && quader[i]->collsX(sphere1->getX()-.1);
-		y = quader[i]->collsY(sphere1->getY());
-		testColls = quader[i]->collsQuader(sphere1->getX(), sphere1->getY());
-		if(x){
-			if(testColls){
-				directionX = !directionX;
-				cout << "collision quader with X" << endl;
-			}
-		}else if(y){
-			if(testColls){
-				directionY = !directionY;
-				cout << "collision quader with Y" << endl;
-			}
-		}
 
-		/*	//Sphere im Ziel?
-		 * *****************************************************
-		x = target.collsXziel(sphere1.x);
-		y = target.collsYziel(sphere1.y);
-		cout << x << endl;
-		testColls = target.collsZiel(sphere1.x, sphere1.y);
-		if(x){
-				if(testColls){
-					cout << "Kugel ist im Ziel X" << endl;
+
+	///Neue Kollision
+	double Sx = sphereX;
+	double Sy = sphereY;
+
+		double Qx = quader[0]->getX();
+		double Qy = quader[0]->getY();
+		double Qz = quader[0]->getZ();
+
+			if( Sx -2 < Qx && Sx> Qx && Qz < 1 ){
+					if(Sy-1  < Qy && Sy+1 > Qy && Qz < 1){
+						directionX = !directionX;
+						cout << "collision  with XY--------------------Quader" << endl;
+					}
 				}
 
-			}else if(y){
-				if(testColls){
-					cout << "Kugel ist im Ziel Y" << endl;
+		double Cx = cylinder[0]->getX();
+		double Cy = cylinder[0]->getY();
+		double Cz = cylinder[0]->getZ();
+
+			if(Sx - 1 < Cx && Sx+.5 > Cx && Cz < 1){
+				if(Sy - 1 < Cy && Sy+.5 > Cy && Cz < 1){
+					directionX = !directionX;
+					cout << "collision  with XY--------------------Cylinder " << endl;
+
 				}
 
 			}
 
-		**********************************************************/
+		double Spx = sphere[0]->getX();
+		double Spy = sphere[0]->getY();
+		double Spz = sphere[0]->getZ();
 
-		//kollision mit dem Sphere
-		x = sphere[i]->collsX(sphere1->getX()+.1) && sphere[i]->collsX(sphere1->getX()-.1);
-		y = sphere[i]->collsY(sphere1->getY());
-		testColls = sphere[i]->collsSphere(sphere1->getX(), sphere1->getY());
-		if(x){
-			if(testColls){
-				directionX = !directionX;
-				cout << "collision sphere with X" << endl;
+			if(Sx - .5 < Spx && Sx+.3 > Spx && Spz < 1){
+				if(Sy - .5 < Spy && Sy+.3 > Spy && Spz < 1){
+					directionX = !directionX;
+					cout << "collision  with XY--------------------Sphere" << endl;
+
+				}
+
 			}
-		}else if(y){
-			if(testColls){
-				directionY = !directionY;
-				cout << "collision sphere with Y" << endl;
-			}
-		}
 
 
-		//kollision mit dem Cylinder
-		x = cylinder[0]->collsX(sphere1->getX()+.1) && cylinder[i]->collsX(sphere1->getX()-.1);
-		y = cylinder[0]->collsY(sphere1->getY());
-		testColls = cylinder[0]->collsCylinder(sphere1->getX(), sphere1->getY());
-		if(x){
-			if(testColls){
-				directionX = !directionX;
-				cout << "collision cylinder with X" << endl;
-			}
-		}else if(y){
-			if(testColls){
-				directionY = !directionY;
-				cout << "collision cylinder with Y" << endl;
-			}
-		}
-	}
+
+
+
+
 
 	// Kollision mit der festen Mauer
 	double wallXLeft = wall.getX();
@@ -293,6 +347,11 @@ void checkCollision() {
 			cout << "Collision with Quader" << endl;
 		}
 	}*/
+
+	cout<< " Sphere X "  << sphere[0]->SphX <<endl;
+	cout<< " Kugel X " << sphereX<< endl;
+	cout<< " Sphere Y "  << sphere[0]->SphY <<endl;
+	cout<< " Kugel Y " << sphereX<< endl;
 }
 // draw the entire scene
 void Preview() {
