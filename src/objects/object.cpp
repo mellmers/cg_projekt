@@ -93,6 +93,9 @@ void Object::setYWidth(double y){
 
 void Object::scale(double scale){
 	s += scale;
+	xWidth += scale;
+	yWidth += scale;
+	r += scale;
 }
 
 void Object::rotate(double d){
