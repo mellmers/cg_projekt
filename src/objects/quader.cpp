@@ -18,8 +18,8 @@ Quader::~Quader(){}
 
 bool Quader::collsQuader(double SphereX, double SphereY){
 	SphX = SphereX, SphY = SphereY;
-	if(SphX-(getXWidth()/2+.5) < x && SphX+(getXWidth()/2+.5) > x && this->getZ() < 1){  		//x Wert  des Objektes überprüft mit Kugelradius .5
-		if(SphY-(getYWidth()/2+.5) < y && SphY+(getYWidth()/2+.5) > y && this->getZ() < 1){ 	//y Wert des Objekt überprüft
+	if(SphX-2 < x && SphX > x && this->getZ() < 1){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-.8 < y && SphY+1.3 > y && this->getZ() < 1){ 	//y Wert des Objekt überprüft
 			collisionY = true;
 		}else{
 			collisionY = false;
@@ -37,7 +37,7 @@ bool Quader::collsQuader(double SphereX, double SphereY){
 
 bool Quader::collsX(double SphereX){
 	SphX = SphereX;
-	if(SphX-(getXWidth()/2+.5) < x && SphY+(getXWidth()/2+.5) > x && this->getZ() < 1) {
+	if(SphX-2< x && SphX > x && this->getZ() < 1){
 		return true;
 	} else {
 		return false;
@@ -46,13 +46,49 @@ bool Quader::collsX(double SphereX){
 
 bool Quader::collsY(double SphereY){
 	SphY = SphereY;
-	if(SphY-(getYWidth()/2+.5) < y && SphY+(getYWidth()/2+.5) > y && this->getZ() < 1) {
+	if(SphY-.8 < y && SphY+1.3 > y && this->getZ() < 1){
 		return true;
 	} else {
 		return false;
 	}
 }
 
+bool Quader::collsZiel(double SphereX, double SphereY){
+	SphX = SphereX, SphY = SphereY;
+	if(SphX-4 < x && SphX > x && this->getZ() < 1){  		//x Wert  des Objektes überprüft mit Kugelradius .5
+		if(SphY-1 < y && SphY+4.5 > y && this->getZ() < 1){ 	//y Wert des Objekt überprüft
+			collisionY = true;
+		}else{
+			collisionY = false;
+		}
+		collisionX = true;
+	}else{
+		collisionX = false;
+	}
+	if(collisionX && collisionY){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Quader::collsXZiel(double SphereX){
+	SphX = SphereX;
+	if(SphX-4< x && SphX > x && this->getZ() < 1){
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool Quader::collsYZiel(double SphereY){
+	SphY = SphereY;
+	if(SphY-1 < y && SphY+4.5 > y && this->getZ() < 1){
+		return true;
+	} else {
+		return false;
+	}
+}
 
 
 
