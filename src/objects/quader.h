@@ -19,7 +19,7 @@
 		bool collsQuader(double sphereX, double sphereY);
 		bool collsZiel(double sphereX, double sphereY);
 		bool collsX(double sphereX),collsY(double sphereY);
-		bool collsXziel(double sphereX),collsYziel(double sphereY);
+		bool collsXZiel(double sphereX),collsYZiel(double sphereY);
 	};
 
 	#endif /* QUADER_H_ */

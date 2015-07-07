@@ -20,6 +20,7 @@
 #include "./objects/quader.h"
 #include "./objects/circle.h"
 #include "./objects/object.h"
+#include <time.h>
 
 using namespace std;
 
@@ -36,11 +37,14 @@ Table table;
 Sphere *sphere1 = new Sphere();
 Quader wall;
 Quader target;
+Quader ziel;
+double z=0;
 
 double spherePositionX = -4, spherePositionY = 0, sphereSpeed = .01;
-bool directionX = true;
-bool directionY = true;
+double directionX = .5;
+double directionY = .5;
 bool sphereStart = false;
+bool zielSichtbar = true;
 
 // Dynamic Objects
 const int allowedObjects = 5;
@@ -146,8 +150,8 @@ void createWorld() {
 	glPushMatrix();
 		SetMaterialColor(3, 1, 1, 1);
 		if(sphereStart) {
-			int dirX = directionX ? 1 : -1;
-			int dirY = directionY ? 1 : -1;
+			double dirX = directionX;
+			double dirY = directionY;
 			spherePositionX += sphereSpeed * dirX;
 			spherePositionY += sphereSpeed * dirY;
 			if(sphereSpeed >= 0) {
@@ -179,6 +183,18 @@ void createWorld() {
 		target.setXWidth(4);
 		target.setYWidth(4);
 	glPopMatrix();
+	if(zielSichtbar){
+
+		glPushMatrix();
+					SetMaterialColor(1, 1, 0, 0);
+					ziel.setX(-8);
+					ziel.setY(.25);
+					ziel.setH(.0005);
+					ziel.draw();
+					ziel.setXWidth(2);
+					ziel.setYWidth(.5);
+		glPopMatrix();
+	}
 }
 
 
@@ -190,148 +206,158 @@ void checkCollision() {
 	double sphereX = (sphere1->getX() + sphere1->getR() / 2) * 2;
 	double sphereY = sphere1->getY() + sphere1->getR() / 2;
 //
-//	// kollision mit dem Würfel
-//	bool testColls, x,y;
-//
-//	for(int i = 0; i < allowedObjects; i++) {
-//		x = quader[i]->collsX(sphereX+.1) && quader[i]->collsX(sphereX-.1);
-//		y = quader[i]->collsY(sphereY);
-//		testColls = quader[i]->collsQuader(sphereX, sphereY);
-//		if(x){
-//			if(testColls){
-//				directionX = !directionX;
-//				cout << "collision quader with X" << endl;
-//			}
-//		}else if(y){
-//			if(testColls){
-//				directionY = !directionY;
-//				cout << "collision quader with Y" << endl;
-//			}
-//		}
-//
-//		/*
-//		 *
-//		 * //Sphere im Ziel?
-//		x = target.collsXziel(sphere1.x);
-//		y = target.collsYziel(sphere1.y);
-//		cout << x << endl;
-//		testColls = target.collsZiel(sphere1.x, sphere1.y);
-//		if(x){
-//				if(testColls){
-//					cout << "Kugel ist im Ziel X" << endl;
-//				}
-//
-//			}else if(y){
-//				if(testColls){
-//					cout << "Kugel ist im Ziel Y" << endl;
-//				}
-//
-//			}
-//
-//		*/
-//
-//
-//		//kollision mit dem Sphere
-//		x = sphere[i]->collsX(sphereX+.1) && sphere[i]->collsX(sphereX-.1);
-//		y = sphere[i]->collsY(sphereY);
-//		testColls = sphere[i]->collsSphere(sphereX, sphereY);
-//		if(x){
-//			if(testColls){
-//				directionX = !directionX;
-//				cout << "collision sphere with X" << endl;
-//			}
-//		}else if(y){
-//			if(testColls){
-//				directionY = !directionY;
-//				cout << "collision sphere with Y" << endl;
-//			}
-//		}
-//
-//
-//		//kollision mit dem Cylinder
-//		x = cylinder[0]->collsX(sphereX+.1) && cylinder[i]->collsX(sphereX-.1);
-//		y = cylinder[0]->collsY(sphereY);
-//		testColls = cylinder[0]->collsCylinder(sphereX, sphereY);
-//		if(x){
-//			if(testColls){
-//				directionX = !directionX;
-//				cout << "collision cylinder with X" << endl;
-//			}
-//		}else if(y){
-//			if(testColls){
-//				directionY = !directionY;
-//				cout << "collision cylinder with Y" << endl;
-//			}
-//		}
-//	}
-//
-//
+	// kollision mit dem Würfel
+	bool testColls, x,y;
 
-
-
-
-	///Neue Kollision
-	double Sx = sphereX;
-	double Sy = sphereY;
-
-		double Qx = quader[0]->getX();
-		double Qy = quader[0]->getY();
-		double Qz = quader[0]->getZ();
-
-			if( Sx -2 < Qx && Sx> Qx && Qz < 1 ){
-					if(Sy-1  < Qy && Sy+1 > Qy && Qz < 1){
-						directionX = !directionX;
-						cout << "collision  with XY--------------------Quader" << endl;
-					}
-				}
-
-		double Cx = cylinder[0]->getX();
-		double Cy = cylinder[0]->getY();
-		double Cz = cylinder[0]->getZ();
-
-			if(Sx - 1 < Cx && Sx+.5 > Cx && Cz < 1){
-				if(Sy - 1 < Cy && Sy+.5 > Cy && Cz < 1){
-					directionX = !directionX;
-					cout << "collision  with XY--------------------Cylinder " << endl;
-
-				}
-
+	for(int i = 0; i < allowedObjects; i++) {
+		x = quader[i]->collsX(sphereX+.1) && quader[i]->collsX(sphereX-.1)  ;
+		y = quader[i]->collsY(sphereY);
+		testColls = quader[i]->collsQuader(sphereX, sphereY);
+		if(x){
+			if(testColls){
+				directionX = -directionX;
+				cout << "collision quader with X" << endl;
 			}
+		}else if(y){
+			if(testColls){
+				directionY = -directionY;
+				cout << "collision quader with Y" << endl;
+			}
+		}
 
-		double Spx = sphere[0]->getX();
-		double Spy = sphere[0]->getY();
-		double Spz = sphere[0]->getZ();
-
-			if(Sx - .5 < Spx && Sx+.3 > Spx && Spz < 1){
-				if(Sy - .5 < Spy && Sy+.3 > Spy && Spz < 1){
-					directionX = !directionX;
-					cout << "collision  with XY--------------------Sphere" << endl;
-
+		//Sphere im Ziel?
+		x = target.collsXZiel(sphereX);
+		y = target.collsYZiel(sphereY);
+		cout << x << endl;
+		testColls = target.collsZiel(sphereX, sphereY);
+		if(x){
+				if(testColls){
+					SetMaterialColor(1, 1, 0, 0);
+					glPushMatrix();
+							target.setX(5.25);
+							target.setY(2);
+							target.setH(.0005);
+							target.draw();
+							target.setXWidth(4);
+							target.setYWidth(4);
+						glPopMatrix();
 				}
 
+		}else if(y){
+			if(testColls){
+				SetMaterialColor(1, 0, 0, 1);
+				glPushMatrix();
+						target.setX(5.25);
+						target.setY(2);
+						target.setH(.0005);
+						target.draw();
+						target.setXWidth(4);
+						target.setYWidth(4);
+					glPopMatrix();
 			}
+		}
 
 
 
 
+		//kollision mit dem Sphere
+		x = sphere[i]->collsX(sphereX+.1) && sphere[i]->collsX(sphereX-.1);
+		y = sphere[i]->collsY(sphereY);
+		testColls = sphere[i]->collsSphere(sphereX, sphereY);
+		if(x){
+			if(testColls){
+				directionX = -directionX;
+				cout << "collision sphere with X" << endl;
+			}
+		}else if(y){
+			if(testColls){
+				directionY = -directionY;
+				cout << "collision sphere with Y" << endl;
+			}
+		}
 
 
-
-	// Kollision mit der festen Mauer
-	double wallXLeft = wall.getX();
-	double wallXRight = wall.getX() + wall.getXWidth();
-	if(sphereX > wallXLeft && sphereX < wallXRight) {
-		directionX = !directionX;
-		cout << "Collision with wall" << endl;
+		//kollision mit dem Cylinder
+		x = cylinder[0]->collsX(sphereX+.1) && cylinder[i]->collsX(sphereX-.1);
+		y = cylinder[0]->collsY(sphereY);
+		testColls = cylinder[0]->collsCylinder(sphereX, sphereY);
+		if(x){
+			if(testColls){
+				directionX = -directionX;
+				cout << "collision cylinder with X" << endl;
+			}
+		}else if(y){
+			if(testColls){
+				directionY = -directionY;
+				cout << "collision cylinder with Y" << endl;
+			}
+		}
 	}
+
+
+
+
+
+//
+//	///Neue Kollision
+//	double Sx = sphereX;
+//	double Sy = sphereY;
+//
+//		double Qx = quader[0]->getX();
+//		double Qy = quader[0]->getY();
+//		double Qz = quader[0]->getZ();
+//
+//
+//			if( Sx -2 < Qx && Sx > Qx && Qz < 1 ){
+//				if(Sy-1  < Qy && Sy+1 > Qy && Qz < 1){
+//					directionX = !directionX;
+//					cout << "collision  with XY--------------------Quader" << endl;
+//				}
+//			}
+//
+//		double Cx = cylinder[0]->getX();
+//		double Cy = cylinder[0]->getY();
+//		double Cz = cylinder[0]->getZ();
+//
+//			if(Sx - 1 < Cx && Sx+.5 > Cx && Cz < 1){
+//				if(Sy - 1 < Cy && Sy+.5 > Cy && Cz < 1){
+//					directionX = !directionX;
+//					cout << "collision  with XY--------------------Cylinder " << endl;
+//
+//				}
+//
+//			}
+//
+//		double Spx = sphere[0]->getX();
+//		double Spy = sphere[0]->getY();
+//		double Spz = sphere[0]->getZ();
+//
+//			if(Sx - .5 < Spx && Sx+.5 > Spx && Spz < 1){
+//				if(Sy - .5 < Spy && Sy+.5 > Spy && Spz < 1){
+//					directionX = !directionX;
+//					cout << "collision  with XY--------------------Sphere" << endl;
+//
+//				}
+//
+//			}
+//
+//
+
+//	// Kollision mit der festen Mauer
+//	double wallXLeft = wall.getX();
+//	double wallXRight = wall.getX() + wall.getXWidth();
+//	if(sphereX > wallXLeft && sphereX < wallXRight) {
+//		directionX = -directionX;
+//		cout << "Collision with wall" << endl;
+//	}
 	// Kollision mit dem Tisch in X
 	if(sphereX <= -9 || sphereX >= 10) {
-		directionX = !directionX;
+		directionX = -directionX;
 		cout << "Collision with table X" << endl;
 	}
 	// Kollision mit dem Tisch in Y
 	if(sphereY >= 7 || sphereY <= -7){
-		directionY = !directionY;
+		directionY = -directionY;
 		cout << "Collision with table Y" << endl;
 	}
 	sphereX = (float)((int)(sphereX*10))/10;
@@ -538,9 +564,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     	if(!vecEmpty()) {
 			selectableObjects.at(selectedObjectId)->rotate(-5);
 		}
-    }else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Kugel starten
+    }else if(key == GLFW_KEY_Y && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate -
+		ziel.rotate(-5);
+	}else if(key == GLFW_KEY_X && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate -
+    	ziel.rotate(5);
+    }else if(key == GLFW_KEY_Z && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate -
+    	if(zielSichtbar){
+    		zielSichtbar = false;
+    		return;
+    	}zielSichtbar = true;
+	}else if(key == GLFW_KEY_V && (action == GLFW_PRESS || action == GLFW_REPEAT)){ // rotate -
+		ziel.setXWidth(5);
+		ziel.draw();
+	}else if(key == GLFW_KEY_SPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Kugel starten
     	cout << "Sphere start" << endl;
     	sphereStart = true;
+    	zielSichtbar = false;
     	//cout << "Sphere stop" << endl;
     }else if(key == GLFW_KEY_BACKSPACE && (action == GLFW_PRESS || action == GLFW_REPEAT)) { // Alles zurücksetzen
     	selectableObjects.clear();
